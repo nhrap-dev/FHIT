@@ -2,7 +2,7 @@
 2021 Colin Lindeman NiyamIT
 Flood Hazard Import Tool FHIT
 
-TODO: finalize creating storm,adv,file lists
+TODO: finalize download file
 '''
 
 import os
@@ -12,6 +12,7 @@ from botocore import UNSIGNED
 from botocore.config import Config
 import json
 import xml.etree.ElementTree as ET
+import pandas as pd
 
 def getHazusHazardInputPath():
     """ Checks the Hazus settings.xml for the path to HazardInput
@@ -58,7 +59,7 @@ def createHazardInputSurgeRiverineFolder(HazusHazardInputPath, hazardInputType):
     elif hazardInputType == 's':
         hazardInputType = 'Surge'
     else:
-        raise Exception("hazardInputType Error: Enter 's' for surge or 'r' for riverine. You entered {hazardInputType}.") 
+        raise Exception(f"Enter 's' for surge or 'r' for riverine. You entered {hazardInputType}.") 
     hazardInputPath = os.path.join(HazusHazardInputPath, hazardInputType)
     if not os.path.exists(hazardInputPath):
         print(f"{hazardInputPath} does not exist, creating...")
@@ -84,15 +85,8 @@ def connectToAwsS3(bucketname):
     s3Objects = s3.list_objects(Bucket=bucketname)
     return s3Objects
 
-def getListofKeys(s3Objects):
-    """ Creates a table of storms, advisories and depth grid rasters
-
-        Keyword Arguments:
-            s3Objects: ? -- Data from the s3 bucket
-
-        Note: THIS is not working, look into using pandas
-    """
-    stormDict = {}
+def getHazusKeys(s3Objects):
+    stormDF = pd.DataFrame(columns = ['name', 'advisory', 'tif', 'key']) 
     for x in s3Objects['Contents']:
         key = x['Key']
         keyFileType = key.split(".")[-1]
@@ -100,21 +94,21 @@ def getListofKeys(s3Objects):
             splitKey = key.split("/")
             Name = splitKey[0]
             Advisory = splitKey[1]
-            tifFile = splitKey[2]
-            print(Name,Advisory,tifFile)
-            stormDict[Name] = {Advisory:[tifFile]}
-    return stormDict
+            tif = splitKey[2]
+            stormDF = stormDF.append({'name':Name,'advisory':Advisory,'tif':tif, 'key':key}, ignore_index=True)
+    return stormDF
 
-def getStormList(stormDict):
-    stormList = stormDict.keys()
-    return stormList
+def getStormNameList(stormDF):
+    stormNameList = stormDF.name.unique().tolist()
+    return stormNameList
 
-def getAdvisoryList(stormDict, stormName):
-    advisoryList = stormDict[stormName].keys()
+def getStormNameAdvisoryList(stormDF, stormName):
+    advisoryList = stormDF.loc[stormDF['name']==stormName].advisory.unique().tolist()
     return advisoryList
 
-def getFileList(stormDict, stormName, advisory):
-    fileList = stormDict[stormName][advisory]
+def getStormNameAdvisoryFileList(stormDF, stormName, advisory):
+    files = stormDF.query(f"name == '{stormName}' and advisory == '{advisory}'")
+    fileList = files.tif.unique().tolist()
     return fileList
 
 def downloadAwsS3File(bucketName, key, downloadPath):
