@@ -40,6 +40,10 @@ def getHazusHazardInputPath():
         HazusHazardInputPath = element.text
     return HazusHazardInputPath
 
+def getAwsS3BucketName():
+    #get this from the settings file
+    return "hazus"
+
 def createHazardInputSurgeRiverineFolder(HazusHazardInputPath, hazardInputType):
     """ Checks if 'Surge' or 'Riverine' folders exist in HazardInput folder, creates
             them if they don't exist.
@@ -103,13 +107,25 @@ def getStormNameList(stormDF):
     return stormNameList
 
 def getStormNameAdvisoryList(stormDF, stormName):
-    advisoryList = stormDF.loc[stormDF['name']==stormName].advisory.unique().tolist()
-    return advisoryList
+    try:
+        advisoryList = stormDF.loc[stormDF['name']==stormName].advisory.unique().tolist()
+        if len(advisoryList) > 0:
+            return advisoryList
+        else:
+            return ['No advisories found']
+    except:
+        return ['stormName is invalid']
 
 def getStormNameAdvisoryFileList(stormDF, stormName, advisory):
-    files = stormDF.query(f"name == '{stormName}' and advisory == '{advisory}'")
-    fileList = files.tif.unique().tolist()
-    return fileList
+    try:
+        files = stormDF.query(f"name == '{stormName}' and advisory == '{advisory}'")
+        fileList = files.tif.unique().tolist()
+        if len(fileList) > 0:
+            return fileList
+        else:
+            return ['No files found']
+    except:
+        return ['stormName or advisory is invalid']
 
 def downloadAwsS3File(bucketName, key, downloadPath):
     """ Downloads specified file from AWS S3 buckets
