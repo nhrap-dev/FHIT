@@ -31,7 +31,7 @@ def getHazusHazardInputPath():
         with open("fhit_settings.json") as f:
             fhitSettings = json.load(f)
     except:
-        with open("./src/fhit_settings.json") as f:
+        with open("./Python_env/fhit_settings.json") as f:
             fhitSettings = json.load(f)
     settingsPath = fhitSettings['HAZUSSettingsXmlPath']
     tree = ET.parse(settingsPath)
@@ -44,7 +44,7 @@ def getAwsS3BucketName():
     #get this from the settings file
     return "hazus"
 
-def createHazardInputSurgeRiverineFolder(HazusHazardInputPath, hazardInputType):
+def createHazardInputTypeFolder(HazusHazardInputPath, hazardInputType):
     """ Checks if 'Surge' or 'Riverine' folders exist in HazardInput folder, creates
             them if they don't exist.
 
@@ -58,12 +58,12 @@ def createHazardInputSurgeRiverineFolder(HazusHazardInputPath, hazardInputType):
         Note: 
     
     """
-    if hazardInputType == 'r':
-        hazardInputType = 'Riverine'
-    elif hazardInputType == 's':
-        hazardInputType = 'Surge'
+    if hazardInputType.lower() == 'riverine':
+        hazardInputType = 'riverine'
+    elif hazardInputType.lower() == 'storm surge':
+        hazardInputType = 'surge'
     else:
-        raise Exception(f"Enter 's' for surge or 'r' for riverine. You entered {hazardInputType}.") 
+        raise Exception(f"Enter 'surge' for surge or 'riverine' for riverine. You entered {hazardInputType}.") 
     hazardInputPath = os.path.join(HazusHazardInputPath, hazardInputType)
     if not os.path.exists(hazardInputPath):
         print(f"{hazardInputPath} does not exist, creating...")
@@ -71,6 +71,16 @@ def createHazardInputSurgeRiverineFolder(HazusHazardInputPath, hazardInputType):
         print(f"{hazardInputPath} created.")
     else:
         print(f"{hazardInputPath} exists.")
+
+def HazardInputTypeFolder(HazusHazardInputPath, hazardInputType):
+    if hazardInputType.lower() == 'riverine':
+        hazardInputType = 'riverine'
+    elif hazardInputType.lower() == 'storm surge':
+        hazardInputType = 'surge'
+    else:
+        raise Exception(f"Enter 'Surge' for surge or 'Riverine' for riverine. You entered {hazardInputType}.")
+    hazardInputPath = os.path.join(HazusHazardInputPath, hazardInputType)
+    return hazardInputPath
 
 def connectToAwsS3(bucketname):
     """ Creates a s3 boto client from a given AWS S3 Bucket
@@ -119,7 +129,7 @@ def getStormNameAdvisoryList(stormDF, stormName):
 def getStormNameAdvisoryFileList(stormDF, stormName, advisory):
     try:
         files = stormDF.query(f"name == '{stormName}' and advisory == '{advisory}'")
-        fileList = files.tif.unique().tolist()
+        fileList = files.key.unique().tolist()
         if len(fileList) > 0:
             return fileList
         else:
@@ -150,17 +160,6 @@ def downloadAwsS3File(bucketName, key, downloadPath):
             raise
 
 if __name__ == "__main__":
-    import json
+    pass
     
-    #get info from fhit settings file...
-    try:
-        with open("fhit_settings.json") as f:
-            fhitSettings = json.load(f)
-    except:
-        with open("./src/fhit_settings.json") as f:
-            fhitSettings = json.load(f)
-    
-    data = connectToAwsS3(fhitSettings['ADCIRCAwsBucket'])
-    getStormAdvDepthGrids(data)
-    downloadAwsS3File('hazus', 'laura/00/laura_hc00.tif', r'C:\HazusData\HazardInput')
     

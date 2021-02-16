@@ -4,14 +4,9 @@ Flood Hazard Import Tool FHIT GUI
 Python 3
 
 TODO:
--add code to main script to import actual data
--build up import button to set off processing of the chosen data
 -icons https://teams.microsoft.com/_#/files/General?threadId=19%3A4f2ec634fe3245a1bcfec366f1bfb31d%40thread.skype&ctx=channel&context=NewGraphics&rootfolder=%252Fsites%252FHazusToolDevelopment%252FShared%2520Documents%252FGeneral%252FInterface%252FNewGraphics
-
-Choosing the type sets the download location
-Choosing the source sets off getting the list of files for that source
-choosing the storm filters the file list
-choosing the file to import sets off the settings check, dir check and creation, download
+-download needs to use key not file name
+-document and screenshots
 '''
 
 import tkinter as tk
@@ -33,6 +28,7 @@ class floodHazardImportTool(tk.Tk):
         self.stormSelection = tk.StringVar()
         self.advisorySelection = tk.StringVar()
         self.floodDepthGridSelection = tk.StringVar()
+        self.fileKey = tk.StringVar()
         
         self.stormList = ['Choose a storm...'] #if these are empty lists, it crashes the gui
         self.advisoryList = ['Choose an advisory...']
@@ -76,11 +72,11 @@ class floodHazardType(ttk.Frame):
                                                                    ,self.setFloodHazardType()
                                                                    ,self.printSelection()])
 
-        self.labelFrame.grid(row=1, column=1, columnspan=2, sticky="EW")
-        self.labelDirections.grid(row=2, column=1, columnspan=2, sticky="EW")
-        self.coastalSurgeRButton.grid(row=3, column=1)
-        self.riverineRButton.grid(row=4, column=1)
-        self.nextButton.grid(row=5, column=2)
+        self.labelFrame.grid(row=1, column=1, columnspan=4, sticky="EW")
+        self.labelDirections.grid(row=2, column=1, columnspan=4, sticky="EW")
+        self.coastalSurgeRButton.grid(row=3, column=1, sticky="W")
+        self.riverineRButton.grid(row=3, column=2, sticky="W")
+        self.nextButton.grid(row=4, column=2, sticky="W")
 
     def printSelection(self):
         print(f"You chose, {root.floodHazardType.get()}!")
@@ -97,7 +93,6 @@ class floodHazardDataSource(ttk.Frame):
         self.floodHazardDataSource = tk.StringVar()
 
         self.labelFrame = ttk.Label(self, text="2. FLOOD HAZARD SOURCE")
-        self.labelFiller = ttk.Label(self, text="")
         self.labelDirections = ttk.Label(self, text="Please select a data source")
         self.adcircRButton = ttk.Radiobutton(self, variable=self.floodHazardDataSource,
                                               text="ADCIRC", value="ADCIRC")
@@ -108,12 +103,11 @@ class floodHazardDataSource(ttk.Frame):
                                                                        ,self.printSelection()])
         self.backButton = ttk.Button(self, text="Back", command=lambda:controller.showFrame(floodHazardType))
 
-        self.labelFrame.grid(row=1, column=1, columnspan=2, sticky="EW")
-        self.labelDirections.grid(row=2, column=1, columnspan=2, sticky="EW")
-        self.adcircRButton.grid(row=3, column=1)
-        self.labelFiller.grid(row=4, column=1, columnspan=2, sticky="EW")
-        self.backButton.grid(row=5, column=1)
-        self.nextButton.grid(row=5, column=2)
+        self.labelFrame.grid(row=1, column=1, columnspan=4, sticky="EW")
+        self.labelDirections.grid(row=2, column=1, columnspan=4, sticky="EW")
+        self.adcircRButton.grid(row=3, column=1, columnspan=4, sticky="EW")
+        self.backButton.grid(row=4, column=1)
+        self.nextButton.grid(row=4, column=2)
 
     def printSelection(self):
         print(f"You chose, {root.floodHazardType.get()}, {root.floodHazardDataSource.get()}!")
@@ -143,7 +137,6 @@ class stormSelection(ttk.Frame):
 
         self.labelFrame = ttk.Label(self, text="3. STORM SELECTION")
         self.labelDirections = ttk.Label(self, text="Please select a storm")
-        self.labelFiller = ttk.Label(self, text="")
         self.comboboxStorm = ttk.Combobox(self)
         self.comboboxStorm['values'] = self.controller.stormList
         self.comboboxStorm.config(state='readonly')
@@ -154,12 +147,11 @@ class stormSelection(ttk.Frame):
                                                                        ,self.printSelection()])
         self.backButton = ttk.Button(self, text="Back", command=lambda:controller.showFrame(floodHazardDataSource))
 
-        self.labelFrame.grid(row=1, column=1)
-        self.labelDirections.grid(row=2, column=1)
-        self.comboboxStorm.grid(row=3, column=1)
-        self.labelFiller.grid(row=4, column=1, columnspan=2, sticky="EW")
-        self.backButton.grid(row=5, column=1)
-        self.nextButton.grid(row=5, column=2)
+        self.labelFrame.grid(row=1, column=1, columnspan=4, sticky="EW")
+        self.labelDirections.grid(row=2, column=1, columnspan=4, sticky="EW")
+        self.comboboxStorm.grid(row=3, column=1, columnspan=4, sticky="EW")
+        self.backButton.grid(row=4, column=1, sticky="E")
+        self.nextButton.grid(row=4, column=2, sticky="W")
 
     def printSelection(self):
         print(f"You chose, {root.floodHazardType.get()}, {root.floodHazardDataSource.get()}, {root.stormSelection.get()}!")
@@ -190,7 +182,6 @@ class advisorySelection(ttk.Frame):
         
         self.labelFrame = ttk.Label(self, text="4. ADVISORY SELECTION")
         self.labelDirections = ttk.Label(self, text="Please select an advisory")
-        self.labelFiller = ttk.Label(self, text="")
         self.comboboxAdvisory = ttk.Combobox(self)
         self.comboboxAdvisory['values'] = self.controller.advisoryList
         self.comboboxAdvisory.config(state='readonly')
@@ -201,12 +192,11 @@ class advisorySelection(ttk.Frame):
                                                                        ,self.printSelection()])
         self.backButton = ttk.Button(self, text="Back", command=lambda:controller.showFrame(stormSelection))
 
-        self.labelFrame.grid(row=1, column=1)
-        self.labelDirections.grid(row=2, column=1)
-        self.comboboxAdvisory.grid(row=3, column=1)
-        self.labelFiller.grid(row=4, column=1, columnspan=2, sticky="EW")
-        self.backButton.grid(row=5, column=1)
-        self.nextButton.grid(row=5, column=2)
+        self.labelFrame.grid(row=1, column=1, columnspan=4, sticky="EW")
+        self.labelDirections.grid(row=2, column=1, columnspan=4, sticky="EW")
+        self.comboboxAdvisory.grid(row=3, column=1, columnspan=4, sticky="EW")
+        self.backButton.grid(row=5, column=1, sticky="E")
+        self.nextButton.grid(row=5, column=2, sticky="W")
 
     def printSelection(self):
         print(f"You chose, {root.floodHazardType.get()}, {root.floodHazardDataSource.get()}, {root.stormSelection.get()}, {root.advisorySelection.get()}!")
@@ -237,21 +227,20 @@ class floodDepthGridSelection(ttk.Frame):
         
         self.labelFrame = ttk.Label(self, text="5. FLOOD DEPTH GRIDS")
         self.labelDirections = ttk.Label(self, text="Please select a depth grid")
-        self.labelFiller = ttk.Label(self, text="")
         self.comboboxFloodDepthGrid = ttk.Combobox(self)
         self.comboboxFloodDepthGrid.config(values=self.controller.fileList)
         self.comboboxFloodDepthGrid.config(state='readonly')
         self.comboboxFloodDepthGrid.current(0)
         self.importButton = ttk.Button(self, text="Import", command=lambda:[self.setFloodDepthGridSelection()
-                                                                           ,self.printSelection()])
+                                                                           ,self.printSelection()
+                                                                           ,self.downloadFile()])
         self.backButton = ttk.Button(self, text="Back", command=lambda:controller.showFrame(advisorySelection))
 
-        self.labelFrame.grid(row=1, column=1)
-        self.labelDirections.grid(row=2, column=1)
-        self.comboboxFloodDepthGrid.grid(row=3, column=1)
-        self.labelFiller.grid(row=4, column=1, columnspan=2, sticky="EW")
-        self.backButton.grid(row=5, column=1)
-        self.importButton.grid(row=5, column=2)
+        self.labelFrame.grid(row=1, column=1, columnspan=4, sticky="EW")
+        self.labelDirections.grid(row=2, column=1, columnspan=4, sticky="EW")
+        self.comboboxFloodDepthGrid.grid(row=3, column=1, columnspan=4, sticky="EW")
+        self.backButton.grid(row=5, column=1, sticky="E")
+        self.importButton.grid(row=5, column=2, sticky="W")
 
     def printSelection(self):
         print(f"You chose, {root.floodHazardType.get()}, {root.floodHazardDataSource.get()}, {root.stormSelection.get()}, {root.advisorySelection.get()}, {root.floodDepthGridSelection.get()}!")
@@ -260,6 +249,13 @@ class floodDepthGridSelection(ttk.Frame):
         self.floodDepthGridSelection.set(self.comboboxFloodDepthGrid.get())
         root.floodDepthGridSelection = self.floodDepthGridSelection
         #root.floodDepthGridSelection.set(self.floodDepthGridSelection)  #this makes PY_VAR7
+
+    def downloadFile(self):
+        floodHazardType = root.floodHazardType.get()
+        hazusHazardInputPath = fhit.getHazusHazardInputPath()
+        downloadFolder = fhit.HazardInputTypeFolder(hazusHazardInputPath, floodHazardType)
+        fhit.createHazardInputTypeFolder(hazusHazardInputPath, floodHazardType)
+        fhit.downloadAwsS3File(fhit.getAwsS3BucketName(), root.floodDepthGridSelection.get(), downloadFolder)
 
 if __name__ == "__main__":
     root = floodHazardImportTool()
