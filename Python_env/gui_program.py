@@ -5,7 +5,7 @@ Python 3
 
 TODO:
 -icons https://teams.microsoft.com/_#/files/General?threadId=19%3A4f2ec634fe3245a1bcfec366f1bfb31d%40thread.skype&ctx=channel&context=NewGraphics&rootfolder=%252Fsites%252FHazusToolDevelopment%252FShared%2520Documents%252FGeneral%252FInterface%252FNewGraphics
--download needs to use key not file name
+-back button should clear selection, i.e. if user changes storms the selected value in the list should exist in the selected storm.
 -document and screenshots
 '''
 

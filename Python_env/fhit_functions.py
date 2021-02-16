@@ -1,8 +1,6 @@
 '''
 2021 Colin Lindeman NiyamIT
 Flood Hazard Import Tool FHIT
-
-TODO: finalize download file
 '''
 
 import os
@@ -34,6 +32,7 @@ def getHazusHazardInputPath():
         with open("./Python_env/fhit_settings.json") as f:
             fhitSettings = json.load(f)
     settingsPath = fhitSettings['HAZUSSettingsXmlPath']
+    
     tree = ET.parse(settingsPath)
     root = tree.getroot()
     for element in root.findall('General/HazardFolderPath'):
@@ -41,8 +40,13 @@ def getHazusHazardInputPath():
     return HazusHazardInputPath
 
 def getAwsS3BucketName():
-    #get this from the settings file
-    return "hazus"
+    try:
+        with open("fhit_settings.json") as f:
+            fhitSettings = json.load(f)
+    except:
+        with open("./Python_env/fhit_settings.json") as f:
+            fhitSettings = json.load(f)
+    return fhitSettings['ADCIRCAwsBucket']
 
 def createHazardInputTypeFolder(HazusHazardInputPath, hazardInputType):
     """ Checks if 'Surge' or 'Riverine' folders exist in HazardInput folder, creates
