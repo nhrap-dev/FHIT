@@ -1,12 +1,18 @@
 '''
 2021 Colin Lindman NiyamIT
 Flood Hazard Import Tool FHIT GUI
-Python 3
+Python 3, Boto3, Pandas
+
+This is a GUI that has one main frame and multiple subframes to act like a multipage wizard.
 
 TODO:
 -icons https://teams.microsoft.com/_#/files/General?threadId=19%3A4f2ec634fe3245a1bcfec366f1bfb31d%40thread.skype&ctx=channel&context=NewGraphics&rootfolder=%252Fsites%252FHazusToolDevelopment%252FShared%2520Documents%252FGeneral%252FInterface%252FNewGraphics
--back button should clear selection, i.e. if user changes storms the selected value in the list should exist in the selected storm.
--document and screenshots
+-back button should clear selection, i.e. if user changes storms the selected value in the list should exist in the selected storm
+-prompt user to overwrite or not?
+-give user feedback that file was downloaded successfully or not
+-give user feedback/status that the app is doing something, like getting list of storms or downloaded data
+-show just the file name and not the key/path at step 5
+-adcirc made changes to their folder structure which affects this gui around 2/16/21
 '''
 
 import tkinter as tk
@@ -79,10 +85,10 @@ class floodHazardType(ttk.Frame):
         self.nextButton.grid(row=4, column=2, sticky="W")
 
     def printSelection(self):
-        print(f"You chose, {root.floodHazardType.get()}!")
+        print(f"You chose, {self.controller.floodHazardType.get()}!")
         
     def setFloodHazardType(self):
-        root.floodHazardType = self.floodHazardType
+        self.controller.floodHazardType = self.floodHazardType
 
 
 class floodHazardDataSource(ttk.Frame):
@@ -110,14 +116,16 @@ class floodHazardDataSource(ttk.Frame):
         self.nextButton.grid(row=4, column=2)
 
     def printSelection(self):
-        print(f"You chose, {root.floodHazardType.get()}, {root.floodHazardDataSource.get()}!")
-        print(f"Available Storms: {root.stormList}")
+        print(f"You chose, {self.controller.floodHazardType.get()}, {self.controller.floodHazardDataSource.get()}!")
+        print(f"Available Storms: ")
+        for storm in self.controller.stormList:
+            print(storm)
         
     def setFloodHazardDataSource(self):
-        root.floodHazardDataSource = self.floodHazardDataSource
+        self.controller.floodHazardDataSource = self.floodHazardDataSource
 
     def setStormList(self):
-        root.stormList = self.adcircStorms()
+        self.controller.stormList = self.adcircStorms()
         page = self.controller.get_page(stormSelection)
         page.comboboxStorm['values'] = self.controller.stormList #update the list
 
@@ -133,8 +141,6 @@ class stormSelection(ttk.Frame):
         super().__init__(container)
         self.controller=controller
 
-        self.stormSelection = tk.StringVar()
-
         self.labelFrame = ttk.Label(self, text="3. STORM SELECTION")
         self.labelDirections = ttk.Label(self, text="Please select a storm")
         self.comboboxStorm = ttk.Combobox(self)
@@ -145,7 +151,8 @@ class stormSelection(ttk.Frame):
                                                                        ,self.setStormSelection()
                                                                        ,self.setAdvisoryList()
                                                                        ,self.printSelection()])
-        self.backButton = ttk.Button(self, text="Back", command=lambda:controller.showFrame(floodHazardDataSource))
+        self.backButton = ttk.Button(self, text="Back", command=lambda:[controller.showFrame(floodHazardDataSource)
+                                                                       ,self.backButton()])
 
         self.labelFrame.grid(row=1, column=1, columnspan=4, sticky="EW")
         self.labelDirections.grid(row=2, column=1, columnspan=4, sticky="EW")
@@ -154,31 +161,34 @@ class stormSelection(ttk.Frame):
         self.nextButton.grid(row=4, column=2, sticky="W")
 
     def printSelection(self):
-        print(f"You chose, {root.floodHazardType.get()}, {root.floodHazardDataSource.get()}, {root.stormSelection.get()}!")
-        print(f"Available Advisories: {root.advisoryList}")
+        print(f"You chose, {self.controller.floodHazardType.get()}, {self.controller.floodHazardDataSource.get()}, {self.controller.stormSelection.get()}!")
+        print(f"Available Advisories:")
+        for x in self.controller.advisoryList:
+            print(x)
 
     def setStormSelection(self):
-        self.stormSelection.set(self.comboboxStorm.get())
-        root.stormSelection = self.stormSelection
+        self.controller.stormSelection.set(self.comboboxStorm.get())
 
     def setAdvisoryList(self):
-        root.advisoryList = self.adcircAdvisories()
+        self.controller.advisoryList = self.adcircAdvisories()
         page = self.controller.get_page(advisorySelection)
         page.comboboxAdvisory['values'] = self.controller.advisoryList #update the list
 
     def adcircAdvisories(self):
         adcircKeys = fhit.connectToAwsS3(fhit.getAwsS3BucketName())
         stormDF = fhit.getHazusKeys(adcircKeys)
-        advisories = fhit.getStormNameAdvisoryList(stormDF, root.stormSelection.get())
+        advisories = fhit.getStormNameAdvisoryList(stormDF, self.controller.stormSelection.get())
         return advisories
+
+    def backButton(self):
+        self.comboboxStorm.set('Choose a storm...')
+        pass
 
 
 class advisorySelection(ttk.Frame):
     def __init__(self, container, controller):
         super().__init__(container)
         self.controller=controller
-
-        self.advisorySelection = tk.StringVar()
         
         self.labelFrame = ttk.Label(self, text="4. ADVISORY SELECTION")
         self.labelDirections = ttk.Label(self, text="Please select an advisory")
@@ -199,31 +209,30 @@ class advisorySelection(ttk.Frame):
         self.nextButton.grid(row=5, column=2, sticky="W")
 
     def printSelection(self):
-        print(f"You chose, {root.floodHazardType.get()}, {root.floodHazardDataSource.get()}, {root.stormSelection.get()}, {root.advisorySelection.get()}!")
-        print(f"Available Files: {root.fileList}")
+        print(f"You chose, {self.controller.floodHazardType.get()}, {self.controller.floodHazardDataSource.get()}, {self.controller.stormSelection.get()}, {self.controller.advisorySelection.get()}!")
+        print(f"Available Files:")
+        for x in self.controller.fileList:
+            print(x)
         
     def setAdvisorySelection(self):
-        self.advisorySelection.set(self.comboboxAdvisory.get())
-        root.advisorySelection = self.advisorySelection
+        self.controller.advisorySelection.set(self.comboboxAdvisory.get())
 
     def setFileList(self):
-        root.fileList = self.adcircFiles()
+        self.controller.fileList = self.adcircFiles()
         page = self.controller.get_page(floodDepthGridSelection)
         page.comboboxFloodDepthGrid['values'] = self.controller.fileList #update the list
         
     def adcircFiles(self):
         adcircKeys = fhit.connectToAwsS3(fhit.getAwsS3BucketName())
         stormDF = fhit.getHazusKeys(adcircKeys)
-        files = fhit.getStormNameAdvisoryFileList(stormDF, root.stormSelection.get(), root.advisorySelection.get())
-        print(f"{root.stormSelection.get()} {root.advisorySelection.get()}")
+        files = fhit.getStormNameAdvisoryFileList(stormDF, self.controller.stormSelection.get(), self.controller.advisorySelection.get())
+        #print(f"{self.controller.stormSelection.get()} {self.controller.advisorySelection.get()}") #for debug
         return files
 
 class floodDepthGridSelection(ttk.Frame):
     def __init__(self, container, controller):
         super().__init__(container)
         self.controller=controller
-
-        self.floodDepthGridSelection = tk.StringVar()
         
         self.labelFrame = ttk.Label(self, text="5. FLOOD DEPTH GRIDS")
         self.labelDirections = ttk.Label(self, text="Please select a depth grid")
@@ -243,19 +252,17 @@ class floodDepthGridSelection(ttk.Frame):
         self.importButton.grid(row=5, column=2, sticky="W")
 
     def printSelection(self):
-        print(f"You chose, {root.floodHazardType.get()}, {root.floodHazardDataSource.get()}, {root.stormSelection.get()}, {root.advisorySelection.get()}, {root.floodDepthGridSelection.get()}!")
+        print(f"You chose, {self.controller.floodHazardType.get()}, {self.controller.floodHazardDataSource.get()}, {self.controller.stormSelection.get()}, {self.controller.advisorySelection.get()}, {self.controller.floodDepthGridSelection.get()}!")
         
     def setFloodDepthGridSelection(self):
-        self.floodDepthGridSelection.set(self.comboboxFloodDepthGrid.get())
-        root.floodDepthGridSelection = self.floodDepthGridSelection
-        #root.floodDepthGridSelection.set(self.floodDepthGridSelection)  #this makes PY_VAR7
+        self.controller.floodDepthGridSelection.set(self.comboboxFloodDepthGrid.get())
 
     def downloadFile(self):
-        floodHazardType = root.floodHazardType.get()
+        floodHazardType = self.controller.floodHazardType.get()
         hazusHazardInputPath = fhit.getHazusHazardInputPath()
         downloadFolder = fhit.HazardInputTypeFolder(hazusHazardInputPath, floodHazardType)
         fhit.createHazardInputTypeFolder(hazusHazardInputPath, floodHazardType)
-        fhit.downloadAwsS3File(fhit.getAwsS3BucketName(), root.floodDepthGridSelection.get(), downloadFolder)
+        fhit.downloadAwsS3File(fhit.getAwsS3BucketName(), self.controller.floodDepthGridSelection.get(), downloadFolder)
 
 if __name__ == "__main__":
     root = floodHazardImportTool()
