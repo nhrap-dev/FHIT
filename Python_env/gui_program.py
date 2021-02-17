@@ -6,8 +6,6 @@ Python 3, Boto3, Pandas
 This is a GUI that has one main frame and multiple subframes to act like a multipage wizard.
 
 TODO:
--icons https://teams.microsoft.com/_#/files/General?threadId=19%3A4f2ec634fe3245a1bcfec366f1bfb31d%40thread.skype&ctx=channel&context=NewGraphics&rootfolder=%252Fsites%252FHazusToolDevelopment%252FShared%2520Documents%252FGeneral%252FInterface%252FNewGraphics
--back button should clear selection, i.e. if user changes storms the selected value in the list should exist in the selected storm
 -prompt user to overwrite or not?
 -give user feedback that file was downloaded successfully or not
 -give user feedback/status that the app is doing something, like getting list of storms or downloaded data
@@ -39,7 +37,8 @@ class floodHazardImportTool(tk.Tk):
         self.stormList = ['Choose a storm...'] #if these are empty lists, it crashes the gui
         self.advisoryList = ['Choose an advisory...']
         self.fileList = ['Choose a file...']
-        
+
+        self.iconbitmap('./images/ICO/24px.ico')
         self.resizable(False, False)
         
         container = ttk.Frame(self)
@@ -152,7 +151,7 @@ class stormSelection(ttk.Frame):
                                                                        ,self.setAdvisoryList()
                                                                        ,self.printSelection()])
         self.backButton = ttk.Button(self, text="Back", command=lambda:[controller.showFrame(floodHazardDataSource)
-                                                                       ,self.backButton()])
+                                                                       ,self.clearComboboxStorm()])
 
         self.labelFrame.grid(row=1, column=1, columnspan=4, sticky="EW")
         self.labelDirections.grid(row=2, column=1, columnspan=4, sticky="EW")
@@ -180,9 +179,8 @@ class stormSelection(ttk.Frame):
         advisories = fhit.getStormNameAdvisoryList(stormDF, self.controller.stormSelection.get())
         return advisories
 
-    def backButton(self):
+    def clearComboboxStorm(self):
         self.comboboxStorm.set('Choose a storm...')
-        pass
 
 
 class advisorySelection(ttk.Frame):
@@ -200,7 +198,8 @@ class advisorySelection(ttk.Frame):
                                                                        ,self.setAdvisorySelection()
                                                                        ,self.setFileList()
                                                                        ,self.printSelection()])
-        self.backButton = ttk.Button(self, text="Back", command=lambda:controller.showFrame(stormSelection))
+        self.backButton = ttk.Button(self, text="Back", command=lambda:[controller.showFrame(stormSelection)
+                                                                       ,self.clearComboboxAdvisory()])
 
         self.labelFrame.grid(row=1, column=1, columnspan=4, sticky="EW")
         self.labelDirections.grid(row=2, column=1, columnspan=4, sticky="EW")
@@ -229,6 +228,9 @@ class advisorySelection(ttk.Frame):
         #print(f"{self.controller.stormSelection.get()} {self.controller.advisorySelection.get()}") #for debug
         return files
 
+    def clearComboboxAdvisory(self):
+        self.comboboxAdvisory.set('Choose an advisory...')
+
 class floodDepthGridSelection(ttk.Frame):
     def __init__(self, container, controller):
         super().__init__(container)
@@ -243,7 +245,8 @@ class floodDepthGridSelection(ttk.Frame):
         self.importButton = ttk.Button(self, text="Import", command=lambda:[self.setFloodDepthGridSelection()
                                                                            ,self.printSelection()
                                                                            ,self.downloadFile()])
-        self.backButton = ttk.Button(self, text="Back", command=lambda:controller.showFrame(advisorySelection))
+        self.backButton = ttk.Button(self, text="Back", command=lambda:[controller.showFrame(advisorySelection)
+                                                                       ,self.clearComboboxFloodDepthGrid()])
 
         self.labelFrame.grid(row=1, column=1, columnspan=4, sticky="EW")
         self.labelDirections.grid(row=2, column=1, columnspan=4, sticky="EW")
@@ -263,6 +266,9 @@ class floodDepthGridSelection(ttk.Frame):
         downloadFolder = fhit.HazardInputTypeFolder(hazusHazardInputPath, floodHazardType)
         fhit.createHazardInputTypeFolder(hazusHazardInputPath, floodHazardType)
         fhit.downloadAwsS3File(fhit.getAwsS3BucketName(), self.controller.floodDepthGridSelection.get(), downloadFolder)
+
+    def clearComboboxFloodDepthGrid(self):
+        self.comboboxFloodDepthGrid.set('Choose a file...')
 
 if __name__ == "__main__":
     root = floodHazardImportTool()
