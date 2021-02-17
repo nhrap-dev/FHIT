@@ -40,6 +40,18 @@ def getHazusHazardInputPath():
     return HazusHazardInputPath
 
 def getAwsS3BucketName():
+    """ Checks the Hazus settings.xml for the name to AwsBucket
+
+        Keyword Arguments:
+            None
+
+        Returns:
+            ADCIRCAwsBucket: str -- The path to ADCIRC AWS S3 bucket.
+
+        Note: This reads the fhit_settings.json file for the bucket name. User
+        can edit the fhit_settings.json if the value changes.
+    
+    """
     try:
         with open("fhit_settings.json") as f:
             fhitSettings = json.load(f)
@@ -77,6 +89,19 @@ def createHazardInputTypeFolder(HazusHazardInputPath, hazardInputType):
         print(f"{hazardInputPath} exists.")
 
 def HazardInputTypeFolder(HazusHazardInputPath, hazardInputType):
+    """Creates the full directory string for the hazardinputtype.
+
+        Keyword Arguments:
+            HazusHazardInputPath: str -- the path to hazus HazardInput directory
+            hazardInputType: str -- the user selected hazard input type
+
+        Returns:
+            hazardInputPath: str -- full path to given hazard input folder
+
+        Note: 
+            C:\HazusData\HazardInput\Surge
+            C:\HazusData\HazardInput\Riverine
+    """
     if hazardInputType.lower() == 'riverine':
         hazardInputType = 'riverine'
     elif hazardInputType.lower() == 'storm surge':
@@ -104,23 +129,64 @@ def connectToAwsS3(bucketname):
     return s3Objects
 
 def getHazusKeys(s3Objects):
+    """ Create an empty dataframe to append s3object keys to it. Only keys
+        with a filetype of 'tif' are appended.
+
+        Keyword Arguments:
+            s3Objects: s3Objects -- s3object from boto3
+
+        Returns:
+            stormDF: pandas dataframe -- A dataframe of the s3ojbects keys
+
+        Note: 
+            Beginning: laura/30/laura_adv30.tif
+            Now:       Tropical/Storm#12/Advisory#30/laura_adv30.tif
+    """
     stormDF = pd.DataFrame(columns = ['name', 'advisory', 'tif', 'key']) 
     for x in s3Objects['Contents']:
         key = x['Key']
         keyFileType = key.split(".")[-1]
         if keyFileType == 'tif':
             splitKey = key.split("/")
-            Name = splitKey[0]
-            Advisory = splitKey[1]
-            tif = splitKey[2]
-            stormDF = stormDF.append({'name':Name,'advisory':Advisory,'tif':tif, 'key':key}, ignore_index=True)
+            if len(splitKey) >3:
+                try:
+                    Name = splitKey[1]
+                    Advisory = splitKey[2]
+                    tif = splitKey[3]
+                    stormDF = stormDF.append({'name':Name,'advisory':Advisory,'tif':tif, 'key':key}, ignore_index=True)
+                except Exception as e:
+                    print(f"{splitKey}:{e}")
+            else:
+                pass
+                #raise Exception(f"splitKey not long enough: {splitKey}")#for debug
     return stormDF
 
 def getStormNameList(stormDF):
+    """ Creates a list of storms.
+
+        Keyword Arguments:
+            stormDF: pandas dataframe -- dataframe containing info on files. created by getHazusKeys
+
+        Returns:
+            stormNameList: list -- list of available storms
+
+        Note: 
+    """   
     stormNameList = stormDF.name.unique().tolist()
     return stormNameList
 
 def getStormNameAdvisoryList(stormDF, stormName):
+    """ Creates a list of advisories for a storm.
+
+        Keyword Arguments:
+            stormDF: pandas dataframe -- dataframe containing info on files. created by getHazusKeys
+            stormName: str -- name of storm
+
+        Returns:
+            advisoryList: list -- list of available advisories given storm name
+
+        Note: 
+    """   
     try:
         advisoryList = stormDF.loc[stormDF['name']==stormName].advisory.unique().tolist()
         if len(advisoryList) > 0:
@@ -131,6 +197,18 @@ def getStormNameAdvisoryList(stormDF, stormName):
         return ['stormName is invalid']
 
 def getStormNameAdvisoryFileList(stormDF, stormName, advisory):
+    """ Creates a list of files for a storm's advisory.
+
+        Keyword Arguments:
+            stormDF: pandas dataframe -- dataframe containing info on files. created by getHazusKeys
+            stormName: str -- name of storm
+            advisory: str -- name of advisory
+
+        Returns:
+            fileList: list -- list of available files given storm name and advisory
+
+        Note: 
+    """   
     try:
         files = stormDF.query(f"name == '{stormName}' and advisory == '{advisory}'")
         fileList = files.key.unique().tolist()
