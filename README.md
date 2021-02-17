@@ -1,7 +1,3 @@
-# FHIT
-
-Flood Hazard Import Tool
-
 # Flood Hazard Import Tool
 
 The Flood Hazard Import Tool FHIT is used to download depth grids for use in Hazus.
