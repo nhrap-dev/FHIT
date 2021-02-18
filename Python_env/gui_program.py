@@ -10,6 +10,7 @@ TODO:
 -give user feedback/status that the app is doing something, like getting list of storms or downloaded data
 -give user feedback that file was downloaded successfully or not
 -show just the file name and not the key/path at step 5
+-adjust combobox widths to account for longest possible values, static or dynamic
 -adcirc made changes to their folder structure around 2/16/21 which affected this gui
 '''
 
@@ -147,6 +148,7 @@ class stormSelection(ttk.Frame):
         self.comboboxStorm = ttk.Combobox(self)
         self.comboboxStorm['values'] = self.controller.stormList
         self.comboboxStorm.config(state='readonly')
+        self.comboboxStorm.config(width=40)
         self.comboboxStorm.current(0)
         self.comboboxStorm.bind("<<ComboboxSelected>>", self.enableNextButton)
         self.nextButton = ttk.Button(self, text="Next", command=lambda:[controller.showFrame(advisorySelection)
@@ -203,6 +205,7 @@ class advisorySelection(ttk.Frame):
         self.comboboxAdvisory['values'] = self.controller.advisoryList
         self.comboboxAdvisory.config(state='readonly')
         self.comboboxAdvisory.current(0)
+        self.comboboxAdvisory.config(width=40)
         self.comboboxAdvisory.bind("<<ComboboxSelected>>", self.enableNextButton)
         self.nextButton = ttk.Button(self, text="Next", command=lambda:[controller.showFrame(floodDepthGridSelection)
                                                                        ,self.setAdvisorySelection()
@@ -257,6 +260,7 @@ class floodDepthGridSelection(ttk.Frame):
         self.labelDirections = ttk.Label(self, text="Please select a depth grid")
         self.comboboxFloodDepthGrid = ttk.Combobox(self)
         self.comboboxFloodDepthGrid.config(values=self.controller.fileList)
+        self.comboboxFloodDepthGrid.config(width=40)
         self.comboboxFloodDepthGrid.config(state='readonly')
         self.comboboxFloodDepthGrid.current(0)
         self.comboboxFloodDepthGrid.bind("<<ComboboxSelected>>", self.enableImportButton)
