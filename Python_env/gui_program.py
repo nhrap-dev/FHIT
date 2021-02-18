@@ -1,16 +1,16 @@
 '''
-2021 Colin Lindman NiyamIT
-Flood Hazard Import Tool FHIT GUI
+2021 Colin Lindeman NiyamIT clindeman@niyamit.com, colinlindeman@hotmail.com
+Flood Hazard Import Tool FHIT
 Python 3, Boto3, Pandas
 
 This is a GUI that has one main frame and multiple subframes to act like a multipage wizard.
 
 TODO:
 -prompt user to overwrite or not?
--give user feedback that file was downloaded successfully or not
 -give user feedback/status that the app is doing something, like getting list of storms or downloaded data
+-give user feedback that file was downloaded successfully or not
 -show just the file name and not the key/path at step 5
--adcirc made changes to their folder structure which affects this gui around 2/16/21
+-adcirc made changes to their folder structure around 2/16/21 which affected this gui
 '''
 
 import tkinter as tk
@@ -21,6 +21,8 @@ import fhit_functions as fhit
 #set_dpi_awareness()
 
 class floodHazardImportTool(tk.Tk):
+    '''This is the main frame that controls the other frames/classes.
+    '''
     def __init__(self):
         super().__init__()
 
@@ -146,10 +148,12 @@ class stormSelection(ttk.Frame):
         self.comboboxStorm['values'] = self.controller.stormList
         self.comboboxStorm.config(state='readonly')
         self.comboboxStorm.current(0)
+        self.comboboxStorm.bind("<<ComboboxSelected>>", self.enableNextButton)
         self.nextButton = ttk.Button(self, text="Next", command=lambda:[controller.showFrame(advisorySelection)
                                                                        ,self.setStormSelection()
                                                                        ,self.setAdvisoryList()
                                                                        ,self.printSelection()])
+        self.nextButton.config(state='disabled')
         self.backButton = ttk.Button(self, text="Back", command=lambda:[controller.showFrame(floodHazardDataSource)
                                                                        ,self.clearComboboxStorm()])
 
@@ -181,6 +185,11 @@ class stormSelection(ttk.Frame):
 
     def clearComboboxStorm(self):
         self.comboboxStorm.set('Choose a storm...')
+        self.nextButton.config(state='disabled')
+
+    def enableNextButton(self, *args):
+        if self.comboboxStorm.get() != 'Choose a storm...':
+            self.nextButton.config(state='normal')
 
 
 class advisorySelection(ttk.Frame):
@@ -194,10 +203,12 @@ class advisorySelection(ttk.Frame):
         self.comboboxAdvisory['values'] = self.controller.advisoryList
         self.comboboxAdvisory.config(state='readonly')
         self.comboboxAdvisory.current(0)
+        self.comboboxAdvisory.bind("<<ComboboxSelected>>", self.enableNextButton)
         self.nextButton = ttk.Button(self, text="Next", command=lambda:[controller.showFrame(floodDepthGridSelection)
                                                                        ,self.setAdvisorySelection()
                                                                        ,self.setFileList()
                                                                        ,self.printSelection()])
+        self.nextButton.config(state='disabled')
         self.backButton = ttk.Button(self, text="Back", command=lambda:[controller.showFrame(stormSelection)
                                                                        ,self.clearComboboxAdvisory()])
 
@@ -230,6 +241,12 @@ class advisorySelection(ttk.Frame):
 
     def clearComboboxAdvisory(self):
         self.comboboxAdvisory.set('Choose an advisory...')
+        self.nextButton.config(state='disabled')
+
+    def enableNextButton(self, *args):
+        if self.comboboxAdvisory.get() != 'Choose an advisory...':
+            self.nextButton.config(state='normal')
+
 
 class floodDepthGridSelection(ttk.Frame):
     def __init__(self, container, controller):
@@ -242,9 +259,11 @@ class floodDepthGridSelection(ttk.Frame):
         self.comboboxFloodDepthGrid.config(values=self.controller.fileList)
         self.comboboxFloodDepthGrid.config(state='readonly')
         self.comboboxFloodDepthGrid.current(0)
+        self.comboboxFloodDepthGrid.bind("<<ComboboxSelected>>", self.enableImportButton)
         self.importButton = ttk.Button(self, text="Import", command=lambda:[self.setFloodDepthGridSelection()
                                                                            ,self.printSelection()
                                                                            ,self.downloadFile()])
+        self.importButton.config(state='disabled')
         self.backButton = ttk.Button(self, text="Back", command=lambda:[controller.showFrame(advisorySelection)
                                                                        ,self.clearComboboxFloodDepthGrid()])
 
@@ -269,6 +288,11 @@ class floodDepthGridSelection(ttk.Frame):
 
     def clearComboboxFloodDepthGrid(self):
         self.comboboxFloodDepthGrid.set('Choose a file...')
+        self.importButton.config(state='disabled')
+
+    def enableImportButton(self, *args):
+        if self.comboboxFloodDepthGrid.get() != 'Choose a file...':
+            self.importButton.config(state='normal')
 
 if __name__ == "__main__":
     root = floodHazardImportTool()
