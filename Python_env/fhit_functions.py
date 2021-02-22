@@ -1,6 +1,7 @@
 '''
 2021 Colin Lindeman NiyamIT
 Flood Hazard Import Tool FHIT
+Python 3, hazpy_env
 '''
 
 import os
@@ -11,6 +12,28 @@ from botocore.config import Config
 import json
 import xml.etree.ElementTree as ET
 import pandas as pd
+import tkinter as tk
+import tkinter.ttk as ttk
+
+def popupmsgNextSteps(msg):
+    """ Creates a tkinter popup message window
+        Keyword Arguments:
+            msg: str -- The message you want to display
+        Note: this one is intended to have the next steps graphic
+        and instructions
+    """
+    popup = tk.Toplevel()
+    popup.grab_set()
+    popup.wm_title("!")
+    popup.resizable(0,0)
+
+    label = ttk.Label(popup, text=msg)
+    label.grid(row=1,column=0,padx=10,pady=10)
+    
+    okayButton = ttk.Button(popup, text="Okay", command = popup.destroy)
+    okayButton.grid(row=3,column=0,padx=10,pady=20)
+    
+    popup.mainloop()
 
 def getHazusHazardInputPath():
     """ Checks the Hazus settings.xml for the path to HazardInput
@@ -235,6 +258,7 @@ def downloadAwsS3File(bucketName, key, downloadPath):
     downloadPathFileName = os.path.join(downloadPath,fileName)
     try:
         s3.Bucket(bucketName).download_file(key, downloadPathFileName)
+        popupmsgNextSteps(f'''File "{key}" is now available in Hazus''')
     except botocore.exceptions.ClientError as e:
         if e.response['Error']['Code'] == "404":
             print("The object does not exist.")
