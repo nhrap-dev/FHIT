@@ -169,13 +169,13 @@ def getHazusKeys(s3Objects):
     for x in s3Objects['Contents']:
         key = x['Key']
         keyFileType = key.split(".")[-1]
-        if keyFileType == 'tif':
+        if keyFileType in ('tiff', 'tif'):
             splitKey = key.split("/")
             if len(splitKey) >3:
                 try:
-                    Name = splitKey[1]
-                    Advisory = splitKey[2]
-                    tif = splitKey[3]
+                    Name = splitKey[2]
+                    Advisory = splitKey[3]
+                    tif = splitKey[-1]
                     stormDF = stormDF.append({'name':Name,'advisory':Advisory,'tif':tif, 'key':key}, ignore_index=True)
                 except Exception as e:
                     print(f"{splitKey}:{e}")
