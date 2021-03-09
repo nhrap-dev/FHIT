@@ -45,7 +45,7 @@ class floodHazardImportTool(tk.Tk):
         self.resizable(False, False)
         
         container = ttk.Frame(self)
-        container.grid(padx=60, pady=30, sticky="EW")
+        container.grid(padx=300, pady=100, sticky="EW")
 
         for frameClass in (floodHazardType, floodHazardDataSource, stormSelection, advisorySelection, floodDepthGridSelection):
             frame = frameClass(container, self)
@@ -234,6 +234,8 @@ class advisorySelection(ttk.Frame):
         self.controller.fileList = self.adcircFiles()
         page = self.controller.get_page(floodDepthGridSelection)
         page.comboboxFloodDepthGrid['values'] = self.controller.fileList #update the list
+        for item in self.controller.fileList:
+            page.listboxFiles.insert('end', item)
         
     def adcircFiles(self):
         adcircKeys = fhit.connectToAwsS3(fhit.getAwsS3BucketName())
@@ -264,6 +266,7 @@ class floodDepthGridSelection(ttk.Frame):
         self.comboboxFloodDepthGrid.config(state='readonly')
         self.comboboxFloodDepthGrid.current(0)
         self.comboboxFloodDepthGrid.bind("<<ComboboxSelected>>", self.enableImportButton)
+        self.listboxFiles = tk.Listbox(self)
         self.importButton = ttk.Button(self, text="Import", command=lambda:[self.setFloodDepthGridSelection()
                                                                            ,self.printSelection()
                                                                            ,self.downloadFile()])
@@ -274,6 +277,7 @@ class floodDepthGridSelection(ttk.Frame):
         self.labelFrame.grid(row=1, column=1, columnspan=4, sticky="EW")
         self.labelDirections.grid(row=2, column=1, columnspan=4, sticky="EW")
         self.comboboxFloodDepthGrid.grid(row=3, column=1, columnspan=4, sticky="EW")
+        self.listboxFiles.grid(row=4, column=1, columnspan=4, sticky='EW')
         self.backButton.grid(row=5, column=1, sticky="E")
         self.importButton.grid(row=5, column=2, sticky="W")
 
