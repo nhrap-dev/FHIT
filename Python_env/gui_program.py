@@ -45,7 +45,7 @@ class floodHazardImportTool(tk.Tk):
         self.resizable(False, False)
         
         container = ttk.Frame(self)
-        container.grid(padx=300, pady=100, sticky="EW")
+        container.grid(padx=40, pady=40, sticky="EW")
 
         for frameClass in (floodHazardType, floodHazardDataSource, stormSelection, advisorySelection, floodDepthGridSelection):
             frame = frameClass(container, self)
@@ -233,7 +233,6 @@ class advisorySelection(ttk.Frame):
     def setFileList(self):
         self.controller.fileList = self.adcircFiles()
         page = self.controller.get_page(floodDepthGridSelection)
-        page.comboboxFloodDepthGrid['values'] = self.controller.fileList #update the list
         for item in self.controller.fileList:
             page.listboxFiles.insert('end', item)
         
@@ -260,26 +259,83 @@ class floodDepthGridSelection(ttk.Frame):
         
         self.labelFrame = ttk.Label(self, text="5. FLOOD DEPTH GRIDS")
         self.labelDirections = ttk.Label(self, text="Please select a depth grid")
-        self.comboboxFloodDepthGrid = ttk.Combobox(self)
-        self.comboboxFloodDepthGrid.config(values=self.controller.fileList)
-        self.comboboxFloodDepthGrid.config(width=40)
-        self.comboboxFloodDepthGrid.config(state='readonly')
-        self.comboboxFloodDepthGrid.current(0)
-        self.comboboxFloodDepthGrid.bind("<<ComboboxSelected>>", self.enableImportButton)
-        self.listboxFiles = tk.Listbox(self)
+        self.listboxFiles = tk.Listbox(self, width=100)
         self.importButton = ttk.Button(self, text="Import", command=lambda:[self.setFloodDepthGridSelection()
                                                                            ,self.printSelection()
                                                                            ,self.downloadFile()])
+        '''Can this be better? programmatically generated from lists?'''
+        self.tableLabelDateTime = ttk.Label(self, text='DateTime:')
+        self.tableValueDateTime = ttk.Label(self, text='test1')
+        self.tableLabelAdvisory = ttk.Label(self, text='Advisory:')
+        self.tableValueAdvisory = ttk.Label(self, text='test2')
+        self.tableLabelVarName = ttk.Label(self, text='VarName:')
+        self.tableValueVarName = ttk.Label(self, text='test3')
+        self.tableLabelGridNameAbbrev = ttk.Label(self, text='GridNameAbbrev:')
+        self.tableValueGridNameAbbrev = ttk.Label(self, text='test4')
+        self.tableLabelWindModel = ttk.Label(self, text='WindModel:')
+        self.tableValueWindModel = ttk.Label(self, text='test5')
+        self.tableLabelWaveModel = ttk.Label(self, text='WaveModel:')
+        self.tableValueWaveModel = ttk.Label(self, text='test6')
+        self.tableLabelEnsName = ttk.Label(self, text='EnsName:')
+        self.tableValueEnsName = ttk.Label(self, text='test7')
+        self.tableLabelOperator = ttk.Label(self, text='Operator:')
+        self.tableValueOperator = ttk.Label(self, text='test8')
+        self.tableLabelMachine = ttk.Label(self, text='Machine:')
+        self.tableValueMachine = ttk.Label(self, text='test9')
+        self.tableLabelOther = ttk.Label(self, text='Other:')
+        self.tableValueOther = ttk.Label(self, text='test10')
+        self.tableLabelres = ttk.Label(self, text='res:')
+        self.tableValueres = ttk.Label(self, text='test11')
+        self.tableLabelullo = ttk.Label(self, text='ullo:')
+        self.tableValueullo = ttk.Label(self, text='test12')
+        self.tableLabelulla = ttk.Label(self, text='ulla:')
+        self.tableValueulla = ttk.Label(self, text='test13')
+        self.tableLabelnx = ttk.Label(self, text='nx:')
+        self.tableValuenx = ttk.Label(self, text='test14')
+        self.tableLabelny = ttk.Label(self, text='ny:')
+        self.tableValueny = ttk.Label(self, text='test15')
+        
         self.importButton.config(state='disabled')
         self.backButton = ttk.Button(self, text="Back", command=lambda:[controller.showFrame(advisorySelection)
-                                                                       ,self.clearComboboxFloodDepthGrid()])
+                                                                       ,self.clearlistboxFiles()])
 
         self.labelFrame.grid(row=1, column=1, columnspan=4, sticky="EW")
         self.labelDirections.grid(row=2, column=1, columnspan=4, sticky="EW")
-        self.comboboxFloodDepthGrid.grid(row=3, column=1, columnspan=4, sticky="EW")
-        self.listboxFiles.grid(row=4, column=1, columnspan=4, sticky='EW')
-        self.backButton.grid(row=5, column=1, sticky="E")
-        self.importButton.grid(row=5, column=2, sticky="W")
+        self.listboxFiles.grid(row=3, column=1, columnspan=4, sticky='EW')
+        
+        self.tableLabelDateTime.grid(row=4, column=1, sticky='EW')
+        self.tableValueDateTime.grid(row=4, column=2, sticky='EW')
+        self.tableLabelAdvisory.grid(row=5, column=1, sticky='EW')
+        self.tableValueAdvisory.grid(row=5, column=2, sticky='EW')
+        self.tableLabelVarName.grid(row=6, column=1, sticky='EW')
+        self.tableValueVarName.grid(row=6, column=2, sticky='EW')
+        self.tableLabelGridNameAbbrev.grid(row=7, column=1, sticky='EW')
+        self.tableValueGridNameAbbrev.grid(row=7, column=2, sticky='EW')
+        self.tableLabelWindModel.grid(row=8, column=1, sticky='EW')
+        self.tableValueWindModel.grid(row=8, column=2, sticky='EW')
+        self.tableLabelWaveModel.grid(row=9, column=1, sticky='EW')
+        self.tableValueWaveModel.grid(row=9, column=2, sticky='EW')
+        self.tableLabelEnsName.grid(row=10, column=1, sticky='EW')
+        self.tableValueEnsName.grid(row=10, column=2, sticky='EW')
+        self.tableLabelOperator.grid(row=11, column=1, sticky='EW')
+        self.tableValueOperator.grid(row=11, column=2, sticky='EW')
+        self.tableLabelMachine.grid(row=12, column=1, sticky='EW')
+        self.tableValueMachine.grid(row=12, column=2, sticky='EW')
+        self.tableLabelOther.grid(row=13, column=1, sticky='EW')
+        self.tableValueOther.grid(row=13, column=2, sticky='EW')
+        self.tableLabelres.grid(row=14, column=1, sticky='EW')
+        self.tableValueres.grid(row=14, column=2, sticky='EW')
+        self.tableLabelullo.grid(row=15, column=1, sticky='EW')
+        self.tableValueullo.grid(row=15, column=2, sticky='EW')
+        self.tableLabelulla.grid(row=15, column=1, sticky='EW')
+        self.tableValueulla.grid(row=15, column=2, sticky='EW')
+        self.tableLabelnx.grid(row=16, column=1, sticky='EW')
+        self.tableValuenx.grid(row=16, column=2, sticky='EW')
+        self.tableLabelny.grid(row=17, column=1, sticky='EW')
+        self.tableValueny.grid(row=17, column=2, sticky='EW')
+        
+        self.backButton.grid(row=100, column=1, sticky="E")
+        self.importButton.grid(row=100, column=2, sticky="W")
 
     def printSelection(self):
         print(f"You chose, {self.controller.floodHazardType.get()}, {self.controller.floodHazardDataSource.get()}, {self.controller.stormSelection.get()}, {self.controller.advisorySelection.get()}, {self.controller.floodDepthGridSelection.get()}!")
@@ -294,8 +350,8 @@ class floodDepthGridSelection(ttk.Frame):
         fhit.createHazardInputTypeFolder(hazusHazardInputPath, floodHazardType)
         fhit.downloadAwsS3File(fhit.getAwsS3BucketName(), self.controller.floodDepthGridSelection.get(), downloadFolder)
 
-    def clearComboboxFloodDepthGrid(self):
-        self.comboboxFloodDepthGrid.set('Choose a file...')
+    def clearlistboxFiles(self):
+        
         self.importButton.config(state='disabled')
 
     def enableImportButton(self, *args):
