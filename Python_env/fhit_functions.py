@@ -235,7 +235,7 @@ def getStormNameAdvisoryFileList(stormDF, stormName, advisory):
     """   
     try:
         files = stormDF.query(f"name == '{stormName}' and advisory == '{advisory}'")
-        fileList = files.key.unique().tolist()
+        fileList = files.tif.unique().tolist()
         if len(fileList) > 0:
             return fileList
         else:
@@ -300,6 +300,21 @@ def getFileAttributes(fileName):
         return fileAttributes
     else:
         return ['file name does not conform to ADCIRC AWS Raster conventions']
+
+def getAWSKeyFromFileName(stormDF, stormName, advisory, fileName):
+    """ Parses an ADCIRC file name for attributes.
+
+        Keyword Arguments:
+            fileName: string -- an ADCIRC file.
+
+        Returns:
+            fileAttributes: dict -- a dictionary of the file's attributes.
+
+        Note: See the ASGS Raster AWS conventions pdf
+    """
+    file = stormDF.query(f"name == '{stormName}' and advisory == '{advisory}' and tif == '{fileName}'")
+    AWSKey = file.key.unique()
+    return AWSKey
 
 def downloadAwsS3File(bucketName, key, downloadPath):
     """ Downloads specified file from AWS S3 buckets
@@ -376,4 +391,6 @@ if __name__ == "__main__":
     for file in fileList:
         print(getFileAttributes(file))
         print()
+        
+    print(getAWSKeyFromFileName(stormDF, stormName, advisory, fileB))
     
