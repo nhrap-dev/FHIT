@@ -26,4 +26,4 @@ This tool currently only supports ADCIRC depth grids.
 
 Issues can be reported through the repository on Github (https://github.com/nhrap-dev/FHIT)
 
-For questions contact hazus-support@riskmapcds.com
+For questions contact fema-hazus-support@fema.dhs.gov
