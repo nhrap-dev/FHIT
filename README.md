@@ -22,6 +22,12 @@ The Flood Hazard Import Tool requires Python >3.6, Hazpy (with Boto3 python libr
 
 This tool currently only supports ADCIRC depth grids.
 
+![ADCIRC File Name FOrmat](images/adcirc_filename.png "ADCIRC File Name Format") 
+
+**2021-Synoptic-20210609-18z**  = YYYYMMDD, 18 hour zulu
+
+**2021-Tropical-al19-30** = 19th storm in the Atlantic in 2021, advisory 30
+
 ## Contact
 
 Issues can be reported through the repository on Github (https://github.com/nhrap-dev/FHIT)
