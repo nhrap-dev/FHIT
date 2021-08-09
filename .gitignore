@@ -1,2 +1,7 @@
 
 *.pyc
+.vs/VSWorkspaceState.json
+.vs/slnx.sqlite
+.vs/PythonSettings.json
+.vs/ProjectSettings.json
+.vs/FHIT/v16/.suo
