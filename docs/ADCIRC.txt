@@ -1,0 +1,13 @@
+https://hazus.s3.us-east-2.amazonaws.com/index.html
+GUI like windows explorer. Source data does not have structure or links to files
+
+https://hazus.s3.us-east-2.amazonaws.com/ 
+XML file that appears to contain elements with file paths
+This entry makes me think it will only list 1000 files on one page <MaxKeys>1000</MaxKeys>
+
+https://hazus.s3-us-east-2.amazonaws.com/laura/29/laura_adv29.tif 
+link that exists in above xml child element to download tif file
+
+
+Note that the above urls are using a designated server, this url may be server agnostic 
+https://hazus.s3.amazonaws.com/

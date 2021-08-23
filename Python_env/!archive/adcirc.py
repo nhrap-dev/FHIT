@@ -12,15 +12,13 @@ from botocore import UNSIGNED
 from botocore.config import Config
 import pandas as pd
 import stormname_lookup
-import fhitsupport as FHITSupport
 
 #TODO update all documentation
 
 class ADCIRC:
     def __init__(self):
         #get pandas dataframe
-        self.data = GetADCIRCData().adcirc_dataframe
-        self.aws_functions = AWSFunctions(self.data)
+        self.data = get_adcirc_data().adcirc_dataframe
 
     def get_year_list(self):
         '''Get a list of years data that are availalbe
@@ -107,30 +105,12 @@ class ADCIRC:
         '''
         key_dataframe = self.data.query(f"key == '{key}'")
         if key_dataframe.empty:
-            #raise 
-            print(f"data frame empty:{key}") #inplace of raise; to fail smoothly
+            raise
         else:
             file_dictionary = key_dataframe.to_dict('records')
             return file_dictionary[0]
 
-    def get_file_attributes_byname(self, FileName:str):
-        ''' FIXME
-
-            Keyword Arguments:
-                name: string -- the file name
-
-            Returns:
-                file_dictionary: dictionary -- a key:value pairing
-        '''
-        FileName_dataframe = self.data.query(f"FileName == '{FileName}'")
-        if FileName_dataframe.empty:
-            #raise 
-            print(f"data frame empty:{FileName}") #inplace of raise; to fail smoothly
-        else:
-            file_dictionary = FileName_dataframe.to_dict('records')
-            return file_dictionary[0]
-
-    def download_asws3_file(self, name, download_path):
+    def download_asws3_file(self, key, download_path):
         pass
 
 class get_awss3bucket_name:
@@ -149,9 +129,7 @@ class get_awss3bucket_name:
     def __init__(self):
         with open(os.path.join(Path(__file__).parent, "config.json")) as f:
             config_json = json.load(f)
-        for source in config_json['data_sources']:
-            if source["name"] == "ADCIRC":
-                self.aws_s3_bucket_name = source["aws_s3_bucket_name"]
+        self.aws_s3_bucket_name = config_json['adcirc']['aws_s3_bucket_name']
 
 class validate_adcirc_key:
     '''Parses a ADCIRC amazonaws s3 Key for metadata. Uses parseADCIRCFileName().
@@ -282,7 +260,7 @@ class parse_adcirc_key:
                     except:
                         file_dict['WeatherType'] = 'Tropical'
                         file_dict['Basin'] = file_dict['StormNumber'][0:2]
-                        file_dict['StormNumber'] = stormname_lookup.tropical_storm_lookup().lookup_name(basin_abbr=file_dict['Basin'], storm_number=file_dict['StormNumber'][-2:], year=file_dict['Year'])
+                        file_dict['StormNameLookup'] = stormname_lookup.tropical_storm_lookup().lookup_name(basin_abbr=file_dict['Basin'], storm_number=file_dict['StormNumber'][-2:], year=file_dict['Year'])
                         #need a lookup of year, stormname and advisory number to get month, day, hour
                     return file_dict
                 else:
@@ -351,7 +329,7 @@ class get_adcirc_keys:
         except Exception as e:
             print('Exception getHazusKeys:', e)
 
-class GetADCIRCData:
+class get_adcirc_data:
     def __init__(self):
         self.bucket_name = get_awss3bucket_name().aws_s3_bucket_name
         self.adcirc_keys = get_adcirc_keys(self.bucket_name).adcirc_keys
@@ -360,12 +338,7 @@ class GetADCIRCData:
         self.adcirc_dataframe = pd.DataFrame()
         self.adcirc_dataframe = self.adcirc_dataframe.append(self.adcirc_attributed_keys, ignore_index=True)
 
-class AWSFunctions:
-    """FIXME -name 'year' is not defined on key lookup
-        download not tested"""
-    def __init__(self, data):
-        self.data = data
-
+class aws:#FIXME
     def get_awskey_from_filename(self, year, weathertype, storm_number, advisory, file_name):
         """ Parses an ADCIRC file name for attributes.
 
@@ -379,12 +352,11 @@ class AWSFunctions:
             Returns:
                 aws_key: str -- a AWS S3 key
 
-            Note: See the ASGS Raster AWS conventions pdf. 
+            Note: See the ASGS Raster AWS conventions pdf
         """
-        file = self.data.query(f"Year == '{year}' and WeatherType == '{weathertype}' and StormNumber == '{storm_number}' and Advisory == '{advisory}' and FileName == '{file_name}'") #ensure field case matches dataframe
+        file = self.data.query(f"year == '{year}' and WeatherType == '{weathertype}' and StormNumber == '{storm_number}' and Advisory == '{advisory}' and filename == '{file_name}'")
         if file.empty:
-            print(f"Empty Query Results!: Year == '{year}' and WeatherType == '{weathertype}' and StormNumber == '{storm_number}' and Advisory == '{advisory}' and FileName == '{file_name}'")
-            return None
+            print(f"Empty Query Results!: year == '{year}' and WeatherType == '{weathertype}' and StormNumber == '{storm_number}' and Advisory == '{advisory}' and filename == '{file_name}'")
         else:
             aws_key = file.key.unique()
             return aws_key[0]
@@ -399,13 +371,13 @@ class AWSFunctions:
 
             Note: 
         """   
-        bucket_name = get_awss3bucket_name().aws_s3_bucket_name
+        bucket_name = self.get_awss3bucket_name()
         s3 = boto3.resource('s3', config=Config(signature_version=UNSIGNED))
         file_name = key.split('/')[-1]
         download_path_file_name = os.path.join(download_path, file_name)
         try:
             s3.Bucket(bucket_name).download_file(key, download_path_file_name)
-            FHITSupport.popupmsgNextSteps(f'''File "{key}" is now available in Hazus''')
+            fhit.popupmsgNextSteps(f'''File "{key}" is now available in Hazus''')
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "404":
                 print("The object does not exist.")
@@ -463,7 +435,5 @@ if __name__ == "__main__":
         print(test.get_file_list("2021", "Tropical", "al05", "30"))
         print()
         print(test.get_file_attributes("2021/tropical/al05/30/GAHM/al05_30_wlmax_EGOMv20b_GAHM_None_nhcConsensus_estrabd_frontera_None_50.-00840.000305.6000.10000.tiff"))
-        print()
-        print(test.aws_functions.get_awskey_from_filename("2021", "Tropical", "al05", "30", "al05_30_wlmax_EGOMv20b_GAHM_None_nhcConsensus_estrabd_frontera_None_50.-00840.000305.6000.10000.tiff"))
         print()
 

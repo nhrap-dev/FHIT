@@ -9,3 +9,5 @@ Atlantic, Eastern North Pacific and Central North Pacific Storm Name list json f
 - https://public.wmo.int/en/media/news/supplemental-list-of-tropical-cyclone-names-raiv
 
 Note that these lists may change if one or more of the names are retired. If that happens, refer to the links and organizations above to update the lists.
+
+Altantic 2020 name list has been reordered to match up with ADCIRC values, where storm 19 is Sally not Teddy.
