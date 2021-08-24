@@ -11,3 +11,7 @@ link that exists in above xml child element to download tif file
 
 Note that the above urls are using a designated server, this url may be server agnostic 
 https://hazus.s3.amazonaws.com/
+
+Possible enhancement:
+files provide upper left latitude and longitude, cell resolution in meters, number of cells in longitude and latitude. 
+This may be enough info to create a bbox/polygon and overlay on simplistic background map (maybe with state/county/SR boundaries).
