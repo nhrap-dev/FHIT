@@ -130,8 +130,13 @@ class ADCIRC:
             file_dictionary = FileName_dataframe.to_dict('records')
             return file_dictionary[0]
 
-    def download_asws3_file(self, name, download_path):
-        pass
+    def rename_dictionary_keys(self, ugly_dict):
+        """Replace dictionary keys with values from a key:value json file
+        """
+        with open(os.path.join(Path(__file__).parent, "adcirc_fieldnames.json")) as f:
+            replacement_keys = json.load(f)
+        pretty_dict = {replacement_keys.get(k, k): v for k, v in ugly_dict.items()}
+        return pretty_dict
 
 class get_awss3bucket_name:
     """ Checks the Hazus settings.xml for the name to AwsBucket
@@ -251,9 +256,9 @@ class parse_adcirc_key:
             file_name = file_path.name
             file_stem = file_path.stem #remove suffix; i.e. .tiff
             file_stem_split = file_stem.split('_')
-            if len(file_stem_split) == 11: #Validation should be moved
+            if len(file_stem_split) == 11: #TODO Validation should be moved
                 raster_info = file_stem_split[10].split('.')
-                if len(raster_info) == 5: #Validation should be moved
+                if len(raster_info) == 5: #TODO Validation should be moved
                     file_dict['StormNumber'] = file_stem_split[0]
                     file_dict['Advisory'] = file_stem_split[1]
                     file_dict['VarName'] = file_stem_split[2]
@@ -342,8 +347,8 @@ class get_adcirc_keys:
                 try:
                     key_dict = {}
                     key_dict['key'] = obj.key
-                    key_dict['size'] = obj.size
-                    key_dict['last_modified'] = obj.last_modified
+                    key_dict['AWS_size'] = obj.size
+                    key_dict['AWS_last_modified'] = obj.last_modified
                     ADCIRC_keys.append(key_dict)
                 except Exception as e:
                     print('Exception obj:', e)

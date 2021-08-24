@@ -365,7 +365,8 @@ class SearchParametersADCIRC(ttk.Frame):
     def file_selection_updated(self, *args):
         """For Trace"""
         #print(f'file selection trace {self.controller.file_selection.get()}') #debug
-        dictionary = self.adcircData.get_file_attributes_byname(self.controller.file_selection.get())
+        ugly_dictionary = self.adcircData.get_file_attributes_byname(self.controller.file_selection.get())
+        dictionary = self.adcircData.rename_dictionary_keys(ugly_dictionary)
         self.controller.file_selection_propeties = dictionary
         self.controller.file_selection_key.set("name")
 
@@ -383,7 +384,7 @@ class SelectFileList(ttk.Frame):
 
     def __create_widgets(self):
         ttk.Label(self, text='SELECT FROM AVAILABLE FILES').grid(column=0, row=0, sticky='w')
-        self.treeviewFiles = ttk.Treeview(self, columns=(1), show='headings')
+        self.treeviewFiles = ttk.Treeview(self, columns=(1), show='headings', selectmode="browse")
         self.treeviewFiles.bind("<<TreeviewSelect>>", self.setFileSelection)
         self.treeviewFiles.grid(column=0, row=1, sticky='ew')
         self.treeviewFiles.heading(1, text='FILE', anchor='w')
@@ -433,14 +434,20 @@ class SelectFileProperties(ttk.Frame):
     def create_widgets(self):
         ttk.Label(self, text='SELECTED FILE PROPERTIES').grid(column=0, row=0, sticky='w')
         self.treeviewFileProperties = ttk.Treeview(self, columns=(1,2), show='headings')
+        self.treeviewFileProperties.column(2, minwidth=200)#TODO appears to not do anything
         self.treeviewFileProperties.grid(column=0, row=1, sticky='ew')
-        self.treeviewFileProperties.heading(1, text='PROPERTY')
-        self.treeviewFileProperties.heading(2, text='VALUE')
+        self.treeviewFileProperties.heading(1, text='PROPERTY', anchor='w')
+        self.treeviewFileProperties.heading(2, text='VALUE', anchor='w')
 
         self.scrollbarFileProperties = tk.Scrollbar(self)
         self.scrollbarFileProperties.grid(column=1, row=1, sticky='ns')
         self.treeviewFileProperties.config(yscrollcommand=self.scrollbarFileProperties.set)
         self.scrollbarFileProperties.config(command=self.treeviewFileProperties.yview)
+
+        self.scrollbarFileProperties_x = tk.Scrollbar(self, orient='horizontal')
+        self.scrollbarFileProperties_x.grid(column=0, row=2, sticky='ew')
+        self.treeviewFileProperties.config(xscrollcommand=self.scrollbarFileProperties_x.set)
+        self.scrollbarFileProperties_x.config(command=self.treeviewFileProperties.xview)
 
     def clear_file_properties(self, *args):
         self.treeviewFileProperties.delete(*self.treeviewFileProperties.get_children())
