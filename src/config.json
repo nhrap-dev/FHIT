@@ -33,7 +33,7 @@
     "hazpyInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/hazpy/main/hazpy/__init__.py",
     "repoZipfileUrl": "https://github.com/nhrap-hazus/FHIT/archive/main.zip",
     "toolInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/FHIT/main/src/__init__.py",
-    "virtualEnvironment": "hazus_env",
+    "virtualEnvironment": "hazus_fhit_env",
     "pythonPackage": "hazpy",
     "httpTimeout": 5
   },
@@ -41,15 +41,15 @@
     "hazpyInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/hazpy/test/hazpy/__init__.py",
     "repoZipfileUrl": "https://github.com/nhrap-hazus/FHIT/archive/test.zip",
     "toolInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/FHIT/test/src/__init__.py",
-    "virtualEnvironment": "hazus_env",
+    "virtualEnvironment": "hazus_fhit_env",
     "pythonPackage": "hazpy",
     "httpTimeout": 5
   },
   "dev": {
     "hazpyInitUrl": "https://raw.githubusercontent.com/nhrap-dev/hazpy/dev/hazpy/__init__.py",
-    "repoZipfileUrl": "https://github.com/nhrap-dev/FHIT/archive/dev.zip",
-    "toolInitUrl": "https://raw.githubusercontent.com/nhrap-dev/FHIT/dev/src/__init__.py",
-    "virtualEnvironment": "hazus_env",
+    "repoZipfileUrl": "https://github.com/nhrap-dev/FHIT/archive/newdev.zip",
+    "toolInitUrl": "https://raw.githubusercontent.com/nhrap-dev/FHIT/newdev/src/__init__.py",
+    "virtualEnvironment": "hazus_fhit_env",
     "pythonPackage": "hazpy",
     "httpTimeout": 5
   },

@@ -4,7 +4,7 @@ python 3
 
 import tkinter as tk
 import tkinter.ttk as ttk
-import views as views
+import views
 
 class MyApplication(tk.Tk):
     """Main Application/Root window"""

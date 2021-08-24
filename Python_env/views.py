@@ -18,7 +18,7 @@ import tkinter.ttk as ttk
 import os
 import json
 from pathlib import Path
-import adcirc as adcirc
+import adcirc
 import fhitsupport as FHITSupport
 
 class GUI(tk.Frame):
