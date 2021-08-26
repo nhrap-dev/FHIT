@@ -22,6 +22,8 @@ import adcirc
 import fhitsupport as FHITSupport
 
 class GUI(tk.Frame):
+    """Create the controller frame
+    """
     def __init__(self, *args):
         super().__init__()
 
@@ -95,6 +97,7 @@ class GUI(tk.Frame):
             self.show_search_parameters_default_frame()
 
 class SelectHazardTypeSource(ttk.Frame):
+    """Frame for selecting hazard type and hazard source"""
     def __init__(self, container, controller):
         super().__init__(container)
         self.controller=controller
@@ -182,6 +185,7 @@ class SelectHazardTypeSource(ttk.Frame):
         #clear file properties
 
 class SearchParametersDefault(ttk.Frame):
+    """Default frame for search parameters; search parameters frame for no data source selected"""
     def __init__(self, container, controller):
         super().__init__(container)
         self.controller=controller
@@ -196,6 +200,7 @@ class SearchParametersDefault(ttk.Frame):
         ttk.Label(self.LabelframeSearchParameters, text='Choose a Hazard Type and Hazard Source').grid(column=0, row=0, padx=5, pady=5, sticky='w')
 
 class SearchParametersADCIRC(ttk.Frame):
+    """ """
     def __init__(self, container, controller):
         super().__init__(container)
         self.controller=controller
@@ -374,6 +379,7 @@ class SearchParametersADCIRC(ttk.Frame):
         self.controller.SelectFilePropertiesFrame.clear_file_properties()
 
 class SelectFileList(ttk.Frame):
+    """Frame for listing files from search parameters"""
     def __init__(self, container, controller):
         super().__init__(container)
         self.controller=controller
@@ -423,6 +429,7 @@ class SelectFileList(ttk.Frame):
 
 
 class SelectFileProperties(ttk.Frame):
+    """Frame to show property/value of selected file"""
     def __init__(self, container, controller):
         super().__init__(container)
         self.columnconfigure(0, weight=1)
@@ -464,6 +471,7 @@ class SelectFileProperties(ttk.Frame):
         self.load_file_properties_data(self.controller.file_selection_propeties)
 
 class Buttons(ttk.Frame):
+    """Frame for buttons"""
     def __init__(self, container, controller):
         super().__init__(container)
         self.controller=controller
@@ -505,6 +513,7 @@ class Buttons(ttk.Frame):
             print('did nothing on download button press')
 
 class Options(ttk.Frame):
+    """Frame for setting options"""
     def __init__(self, container, controller):
         super().__init__(container)
         self.controller=controller

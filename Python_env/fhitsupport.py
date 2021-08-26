@@ -11,8 +11,10 @@ import tkinter.ttk as ttk
 
 def popupmsgNextSteps(msg):
     """ Creates a tkinter popup message window
+
         Keyword Arguments:
             msg: str -- The message you want to display
+
         Note: this one is intended to have the next steps graphic
         and instructions
     """
@@ -32,15 +34,11 @@ def popupmsgNextSteps(msg):
 def GetHazusHazardInputPath():
     """ Checks the Hazus settings.xml for the path to HazardInput
 
-        Keyword Arguments:
-            None
-
         Returns:
             HazusHazardInputPath: str -- The path to HazardInput directory.
 
         Note: This reads the fhit_settings.json file for the hazus path. User
-        can edit the fhit_settings.json if their install didn't use default paths.
-    
+        can edit the fhit_settings.json if their install didn't use the default path.
     """
     try:
         with open("config.json") as f:

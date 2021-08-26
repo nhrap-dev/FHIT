@@ -97,7 +97,7 @@ class ADCIRC:
             return None
 
     def get_file_attributes(self, key:str):
-        ''' FIXME
+        ''' Get the file attributes for a given AWS Key
 
             Keyword Arguments:
                 key: string -- the aws key value
@@ -114,10 +114,10 @@ class ADCIRC:
             return file_dictionary[0]
 
     def get_file_attributes_byname(self, FileName:str):
-        ''' FIXME
+        ''' Get the file attributes by a given file name
 
             Keyword Arguments:
-                name: string -- the file name
+                FileName: string -- the file name
 
             Returns:
                 file_dictionary: dictionary -- a key:value pairing
@@ -132,6 +132,12 @@ class ADCIRC:
 
     def rename_dictionary_keys(self, ugly_dict):
         """Replace dictionary keys with values from a key:value json file
+            
+            Keyword Arguments:
+                ugly_dict: dict -- a dictionary to change dict keys
+
+            Returns:
+                pretty_dict: dictionary -- a dictionary with keys replaced from lookup json
         """
         with open(os.path.join(Path(__file__).parent, "adcirc_fieldnames.json")) as f:
             replacement_keys = json.load(f)
@@ -190,7 +196,7 @@ class validate_adcirc_key:
             print('Exception validate_adcirc_key:', e)
 
 class validate_adcirc_keys:
-    '''FIXME
+    '''Validate ADCIRC keys, remove those that are not valid
 
         Keyword Arguments:
             keys: list -- a list of dictionaries
@@ -302,6 +308,15 @@ class attribute_keys:
         self.attributed_keys = self.attribute_keys(keys)
 
     def attribute_keys(self, keys:list) -> list:
+        """ For a list of dictionaries, parse ADCIRC key for file properties 
+            and add them as create key:value
+
+            Keyword Arguments:
+                keys: list -- list of dictionaries
+
+            Returns:
+                attributed_keys:  list -- list of dictionaries
+        """
         attributed_keys = []
         for key in keys:
             attributes_dict = parse_adcirc_key().parse(key['key'])
@@ -357,6 +372,7 @@ class get_adcirc_keys:
             print('Exception getHazusKeys:', e)
 
 class GetADCIRCData:
+    """ Class that puts other classes together to initialize the ADCIRC data"""
     def __init__(self):
         self.bucket_name = get_awss3bucket_name().aws_s3_bucket_name
         self.adcirc_keys = get_adcirc_keys(self.bucket_name).adcirc_keys
@@ -366,8 +382,7 @@ class GetADCIRCData:
         self.adcirc_dataframe = self.adcirc_dataframe.append(self.adcirc_attributed_keys, ignore_index=True)
 
 class AWSFunctions:
-    """FIXME -name 'year' is not defined on key lookup
-        download not tested"""
+    """Class with functions specific to AWS S3"""
     def __init__(self, data):
         self.data = data
 
@@ -402,7 +417,6 @@ class AWSFunctions:
                 download_path: str -- path of folder to download to ie 'C:/HazusData/HazardInput/Riverine'
                 download_path_file_name: str -- name of downloaded file
 
-            Note: 
         """   
         bucket_name = get_awss3bucket_name().aws_s3_bucket_name
         s3 = boto3.resource('s3', config=Config(signature_version=UNSIGNED))
