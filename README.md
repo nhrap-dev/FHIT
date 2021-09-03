@@ -10,52 +10,52 @@ The Flood Hazard Import Tool requires Python >3.6, Hazpy, Hazus, and an internet
 
 1. Download zip folder of tool from GitHub, unzip
 
-![Download Release FHIT](Python_env/assets/images/DownloadReleaseFHIT.jpg "Download Release FHIT")
+  ![Download Release FHIT](images/DownloadReleaseFHIT.jpg "Download Release FHIT")
 
 2. Double click the FHIT.py to run it. It will check if you have the latest hazpy and tool version. 
 
-![Run FHIT](Python_env/assets/images/RunFHIT.jpg "Run FHIT")
+  ![Run FHIT](images/RunFHIT.JPG "Run FHIT")
 
 3. Select your hazard type (Coastal, Riverine, Storm Surge)
 
-![Select Hazard Type](Python_env/assets/images/SelectHazardType.jpg "Select Hazard Type")
+  ![Select Hazard Type](images/SelectHazardType.jpg "Select Hazard Type")
 
 4. Select your data source. The subsequent search parameters will differ depending on the data source
 
-![Select Hazard Source](Python_env/assets/images/SelectHazardSource.jpg "Select Hazard Source")
+  ![Select Hazard Source](images/SelectHazardSource.jpg "Select Hazard Source")
 
 ADCIRC:
 
   1. Select your year
     
-  ![ADCIRC Select Year](Python_env/assets/images/ADCIRCSelectYear.jpg "ADCIRC Select Year")
+  ![ADCIRC Select Year](images/ADCIRCSelectYear.jpg "ADCIRC Select Year")
     
   2. Select your weather type (Tropical, Synoptic)
     
-  ![ADCIRC Select Weather Type](Python_env/assets/images/ADCIRCSelectWeatherType.jpg "ADCIRC Select Weather Type")
+  ![ADCIRC Select Weather Type](images/ADCIRCSelectWeatherType.jpg "ADCIRC Select Weather Type")
     
   3. Select your storm
     
-  ![ADCIRC Select Storm](Python_env/assets/images/ADCIRCSelectStorm.jpg "ADCIRC Select Storm")
+  ![ADCIRC Select Storm](images/ADCIRCSelectStorm.jpg "ADCIRC Select Storm")
     
   4. Select your storm advisory 
     
-  ![ADCIRC Select Advisory](Python_env/assets/images/ADCIRCSelectAdvisory.jpg "ADCIRC Select Advisory")
+  ![ADCIRC Select Advisory](images/ADCIRCSelectAdvisory.jpg "ADCIRC Select Advisory")
   
  
 5. Select Depth Grid File
 
-![File List](Python_env/assets/images/FileList.jpg "File List")
+  ![File List](images/FileList.jpg "File List")
  
 You will see the selected files properties once you've selected a file
 
-![File Properties](Python_env/assets/images/FileProperties.jpg "File Properties")
+  ![File Properties](images/FileProperties.jpg "File Properties")
 
 6. Import you selected depth grid. This will create a 'Coastal', 'Riverine' or 'Surge' folder in your HazardInput folder if they do not already exist and download the selected depth grid to it
 
-![Download Button](Python_env/assets/images/DownloadButton.jpg "Download Button")
+  ![Download Button](images/DownloadButton.jpg "Download Button")
 
-![Download Success](Python_env/assets/images/DownloadSuccess.jpg "Download Success")
+  ![Download Success](images/DownloadSuccess.jpg "Download Success")
 
 ## Documentation
 
@@ -63,7 +63,7 @@ See the files in the Docs folder for additional information.
 
 This tool currently only supports ADCIRC depth grids.
 
-![ADCIRC File Name FOrmat](images/adcirc_filename.png "ADCIRC File Name Format") 
+  ![ADCIRC File Name Format](images/adcirc_filename.png "ADCIRC File Name Format") 
 
 **2021-Synoptic-20210609-18z**  = YYYYMMDD, 18 hour zulu
 
