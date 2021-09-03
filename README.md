@@ -14,13 +14,13 @@ The Flood Hazard Import Tool requires Python >3.6, Hazpy, Hazus, and an internet
 
 2. Double click the FHIT.py to run it. It will check if you have the latest hazpy and tool version. 
 
-![Run FHIT](Python_env/assets/images/DownloadReleaseFHIT.jpg "Run FHIT")
+![Run FHIT](Python_env/assets/images/RunFHIT.jpg "Run FHIT")
 
-3. Select your hazard type
+3. Select your hazard type (Coastal, Riverine, Storm Surge)
 
 ![Select Hazard Type](Python_env/assets/images/SelectHazardType.jpg "Select Hazard Type")
 
-4. Select your data source. The search parameters will differ depending on data source
+4. Select your data source. The subsequent search parameters will differ depending on the data source
 
 ![Select Hazard Source](Python_env/assets/images/SelectHazardSource.jpg "Select Hazard Source")
 
@@ -30,9 +30,9 @@ ADCIRC:
     
   ![ADCIRC Select Year](Python_env/assets/images/ADCIRCSelectYear.jpg "ADCIRC Select Year")
     
-  2. Select your weather type
+  2. Select your weather type (Tropical, Synoptic)
     
-  ![ADCIRC Select Weather Type](Python_env/assets/images/ADCIRCSelectWeatherType.jpg "ADCIRC Select Waeather Type")
+  ![ADCIRC Select Weather Type](Python_env/assets/images/ADCIRCSelectWeatherType.jpg "ADCIRC Select Weather Type")
     
   3. Select your storm
     
@@ -52,6 +52,8 @@ You will see the selected files properties once you've selected a file
 ![File Properties](Python_env/assets/images/FileProperties.jpg "File Properties")
 
 6. Import you selected depth grid. This will create a 'Coastal', 'Riverine' or 'Surge' folder in your HazardInput folder if they do not already exist and download the selected depth grid to it
+
+![Download Button](Python_env/assets/images/DownloadButton.jpg "Download Button")
 
 ![Download Success](Python_env/assets/images/DownloadSuccess.jpg "Download Success")
 
