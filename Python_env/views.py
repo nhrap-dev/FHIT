@@ -16,8 +16,11 @@ Widget Classes
 import tkinter as tk
 import tkinter.ttk as ttk
 import os
+import time
 import json
 from pathlib import Path
+from threading import Thread
+import ctypes
 import adcirc
 import fhitsupport as FHITSupport
 
@@ -478,10 +481,10 @@ class Buttons(ttk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.ButtonDownloadImport = ttk.Button(self, text="Download and Import Selected File", command=self.download_file).grid(column=0, row=1, padx=5)
+        self.ButtonDownloadImport = ttk.Button(self, text="Download and Import Selected File", command=self.button_download_command).grid(column=0, row=1, padx=5)
         self.ButtonBrowseImport = ttk.Button(self, text="Browse for Existing Hazard Data to Import").grid(column=1, row=1, padx=5)
         self.ButtonQuit = ttk.Button(self, text="Quit")
-        self.ButtonQuit.configure(command=self.quit) # will quit Tcl interpreter, i.e. IDLE
+        self.ButtonQuit.configure(command=self.controller.quit) # will quit Tcl interpreter, i.e. IDLE
         self.ButtonQuit.grid(column=2, row=1, padx=5)
 
     def download_file(self):
@@ -503,14 +506,31 @@ class Buttons(ttk.Frame):
             weathertype = self.controller.SearchParametersADCIRCFrame.weathertypeSelection.get()
             storm_number = self.controller.SearchParametersADCIRCFrame.stormSelection.get()
             advisory = self.controller.SearchParametersADCIRCFrame.advisorySelection.get()
-            #for x in (year, weathertype, storm_number, advisory, file_name): #test
-            #    print(x)
-            #print(self.controller.SearchParametersADCIRCFrame.adcircData.get_year_list()) #debug
             key = self.controller.SearchParametersADCIRCFrame.adcircData.aws_functions.get_awskey_from_filename(year, weathertype, storm_number, advisory, file_name)
-            #print(key) #test
             self.controller.SearchParametersADCIRCFrame.adcircData.aws_functions.download_awss3_file(key, download_path)
+            popup_download_complete = ctypes.windll.user32.MessageBoxW
+            Thread(target = lambda :popup_download_complete(None, f'Downloaded: {key}', 'Download Complete', 0)).start()
         else:
             print('did nothing on download button press')
+
+    def popup(self):
+        '''Create a popup window'''
+        popup_window = tk.Toplevel(self)
+        popup_window.transient()
+        tk.Label(popup_window, text="Please Wait...", font=(None, 36)).pack()
+        self.update()
+        popup_window.grab_set()
+        return popup_window
+    def make_popup(self):
+        '''Create popup window while downloading the file'''
+        wait_popup = self.popup()
+        self.download_file()
+        print('end popup')
+        wait_popup.destroy()
+    def button_download_command(self):
+        '''Create a threaded popup window and downloading file'''
+        print('begin popup')
+        return Thread(target=self.make_popup, daemon=True).start()
 
 class Options(ttk.Frame):
     """Frame for setting options"""
