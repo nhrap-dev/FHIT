@@ -424,7 +424,8 @@ class AWSFunctions:
         download_path_file_name = os.path.join(download_path, file_name)
         try:
             s3.Bucket(bucket_name).download_file(key, download_path_file_name)
-            FHITSupport.popupmsgNextSteps(f'''File "{key}" is now available in Hazus''')
+            print(f'downloaded: {key} To: {download_path_file_name}')
+            ##FHITSupport.popupmsgNextSteps(f'''File "{key}" is now available in Hazus''') #TODO this should go in gui; replace with text here CL
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "404":
                 print("The object does not exist.")
