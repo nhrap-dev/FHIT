@@ -525,11 +525,9 @@ class Buttons(ttk.Frame):
         '''Create popup window while downloading the file'''
         wait_popup = self.popup()
         self.download_file()
-        print('end popup')
         wait_popup.destroy()
     def button_download_command(self):
         '''Create a threaded popup window and downloading file'''
-        print('begin popup')
         return Thread(target=self.make_popup, daemon=True).start()
 
 class Options(ttk.Frame):
