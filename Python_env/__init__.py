@@ -6,7 +6,7 @@
 
     :copyright: © 2021 by FEMA's Natural Hazards and Risk Assesment Program.
     :license: cc, see LICENSE for more details.
-    :author: Colin Lindeman; colinlindeman@hotmail.com, Colin Lindeman; clindeman@niyamit.com
+    :author: Colin Lindeman; Colin Lindeman; clindeman@niyamit.com
 
 """
 

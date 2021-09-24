@@ -1,4 +1,4 @@
-'''2021 colin lindeman clindeman@niyamit.com, colin.lindeman@gmail.edu
+'''2021 colin lindeman clindeman@niyamit.com
 Python 3, hazus_env
 '''
 
