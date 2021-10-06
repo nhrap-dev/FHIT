@@ -1,0 +1,18 @@
+https://hazus.s3.us-east-2.amazonaws.com/index.html
+GUI like windows explorer. Source data does not have structure or links to files
+
+https://hazus.s3.us-east-2.amazonaws.com/ 
+XML file that appears to contain elements with file paths
+This entry makes me think it will only list 1000 files on one page <MaxKeys>1000</MaxKeys> There is another element notifying if the keys have been truncated.
+The AWS S3 bucket api can only provide 1000 keys at a time, so you would need to stream all of them or get chunks of 1000 keys.
+
+https://hazus.s3-us-east-2.amazonaws.com/laura/29/laura_adv29.tif 
+link that exists in above xml child element to download tif file
+
+
+Note that the above urls are using a designated server, this url may be server agnostic 
+https://hazus.s3.amazonaws.com/
+
+Possible enhancement:
+files provide upper left latitude and longitude, cell resolution in meters, number of cells in longitude and latitude. 
+This may be enough info to create a bbox/polygon and overlay on simplistic background map (maybe with state/county/SR boundaries).

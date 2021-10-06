@@ -163,13 +163,14 @@ def getHazusKeys(s3Objects):
 
         Note: 
             Beginning: laura/30/laura_adv30.tif
-            Now:       Tropical/Storm#12/Advisory#30/laura_adv30.tif
+            Then:   Tropical/Storm#12/Advisory#30/laura_adv30.tif
+            Now:    2020/Tropical/al12/28/GAHM/al12_28_inunmax_lav20a_GAHM_Swan_nhcConsensus_jgf_qbc_None_50.-00915.000310.10000.6000.tiff
     """
-    stormDF = pd.DataFrame(columns = ['name', 'advisory', 'tif', 'key']) 
+    stormDF = pd.DataFrame(columns = ['year', 'weathertype', 'name', 'advisory', 'windmodel', 'tif', 'key']) 
     for x in s3Objects['Contents']:
         key = x['Key']
         keyFileType = key.split(".")[-1]
-        if keyFileType in ('tiff', 'tif'):
+        if keyFileType in ('tif','tiff'):
             splitKey = key.split("/")
             if len(splitKey) >3:
                 try:
@@ -234,13 +235,86 @@ def getStormNameAdvisoryFileList(stormDF, stormName, advisory):
     """   
     try:
         files = stormDF.query(f"name == '{stormName}' and advisory == '{advisory}'")
-        fileList = files.key.unique().tolist()
+        fileList = files.tif.unique().tolist()
         if len(fileList) > 0:
             return fileList
         else:
             return ['No files found']
     except:
         return ['stormName or advisory is invalid']
+
+def getStormNameAdvisoryFileDict(stormDF, stormName, advisory):
+    """ Creates a list of files for a storm's advisory.
+
+        Keyword Arguments:
+            stormDF: pandas dataframe -- dataframe containing info on files. created by getHazusKeys
+            stormName: str -- name of storm
+            advisory: str -- name of advisory
+
+        Returns:
+            fileDict: dict -- list of available file names, key given storm name and advisory
+
+        Note: You can change the dict type. https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_dict.html
+    """   
+    try:
+        files = stormDF.query(f"name == '{stormName}' and advisory == '{advisory}'")
+        fileDict = files.to_dict()
+        if len(fileDict) > 0:
+            return fileDict
+        else:
+            return ['No files found']
+    except:
+        return ['stormName or advisory is invalid']
+
+def getFileAttributes(fileName):
+    """ Parses an ADCIRC file name for attributes.
+
+        Keyword Arguments:
+            fileName: string -- an ADCIRC file.
+
+        Returns:
+            fileAttributes: dict -- a dictionary of the file's attributes.
+
+        Note: See the ASGS Raster AWS conventions pdf
+    """
+    splitFileName = fileName.split('_')
+    
+    if len(splitFileName) == 11:
+        RasterParams = splitFileName[10].split('.')
+
+        fileAttributes = dict(DateTime = splitFileName[0]
+                            ,Advisory = splitFileName[1]
+                            ,VarName = splitFileName[2]
+                            ,GridNameAbbrev = splitFileName[3]
+                            ,WindModel = splitFileName[4]
+                            ,WaveModel = splitFileName[5]
+                            ,EnsName = splitFileName[6]
+                            ,Operator = splitFileName[7]
+                            ,Machine =splitFileName[8]
+                            ,Other = splitFileName[9]
+                            ,res = RasterParams[0]
+                            ,ullo = RasterParams[1]
+                            ,ulla = RasterParams[2]
+                            ,nx = RasterParams[3]
+                            ,ny = RasterParams[4])
+        return fileAttributes
+    else:
+        return ['file name does not conform to ADCIRC AWS Raster conventions']
+
+def getAWSKeyFromFileName(stormDF, stormName, advisory, fileName):
+    """ Parses an ADCIRC file name for attributes.
+
+        Keyword Arguments:
+            fileName: string -- an ADCIRC file.
+
+        Returns:
+            fileAttributes: dict -- a dictionary of the file's attributes.
+
+        Note: See the ASGS Raster AWS conventions pdf
+    """
+    file = stormDF.query(f"name == '{stormName}' and advisory == '{advisory}' and tif == '{fileName}'")
+    AWSKey = file.key.unique()
+    return AWSKey
 
 def downloadAwsS3File(bucketName, key, downloadPath):
     """ Downloads specified file from AWS S3 buckets
@@ -266,6 +340,57 @@ def downloadAwsS3File(bucketName, key, downloadPath):
             raise
 
 if __name__ == "__main__":
-    pass
+    '''Test that the AWS S3 bucket functions are working '''
+    bucketname = getAwsS3BucketName()
+    print(f"AWS S3 Bucket: {bucketname}")
+    print()
     
+    s3Objects = connectToAwsS3(bucketname)
+    
+    stormDF = getHazusKeys(s3Objects)
+    
+    storms = getStormNameList(stormDF)
+    print("Storms:")
+    for name in storms:
+        print(name)
+    print()
+    
+    stormName = input("Enter a storm name that exist in the stormlist: ")
+    print(stormName)
+    advisories = getStormNameAdvisoryList(stormDF, stormName)
+    print("Advisories:")
+    for advisory in advisories:
+        print(advisory)
+    print()
+    
+    advisory = input("Enter an existing advisory for your selected storm: ")
+    print(stormName)
+    print(advisory)
+    fileList = getStormNameAdvisoryFileList(stormDF, stormName, advisory)
+    for file in fileList:
+        print(file)
+    print()
+    
+    fileDict = getStormNameAdvisoryFileDict(stormDF, stormName, advisory)
+    for key, value in fileDict.items():
+        print(key, value)
+        print(key, value[1])
+
+    for file in fileList:
+        fileAttributes = getFileAttributes(file)
+        print(fileAttributes)
+    print()
+
+    '''Test that the file name parsing is working'''
+    fileA = '20180101_00Z_zetamax_ec95d_ERA5_None_reanalysis_bob_hatteras_None_1000.-00785.000355.100.60.tiff'
+    fileB = 'al12_28_inunmax_lav20a_GAHM_Swan_nhcConsensus_jgf_qbc_None_50.-00915.000310.10000.6000.tiff'
+    fileC = 'al12_29_inunmax_lav20a_GAHM_Swan_nhcConsensus_jgf_qbc_None_50.-00915.000310.10000.6000.tiff'
+    fileD = 'al12_30_inunmax_lav20a_GAHM_Swan_nhcConsensus_jgf_qbc_None_50.-00915.000310.10000.6000.tiff'
+    fileE = 'al19_18_inunmax_NGOMv19b_GAHM_Swan_nhcConsensus_bde_frontera_None_50.-00915.000310.10000.6000.tiff'
+    fileList = [fileA, fileB, fileC, fileD, fileE]
+    for file in fileList:
+        print(getFileAttributes(file))
+        print()
+        
+    print(getAWSKeyFromFileName(stormDF, stormName, advisory, fileB))
     

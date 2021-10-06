@@ -1,0 +1,15 @@
+{
+    "VarName": "ADCIRC Variable mapped to raster",
+    "GridNameAbbrev": "Abbreviated ADCIRC grid name for the simulation",
+    "WindModel": "Wind Model (NHC/GAHM, Blended | NaM, GFS)",
+    "WaveModel": "Wave Model used (Swan, Stwave, WW3) or None",
+    "EnsName": "Ensemble member name",
+    "Operator": "ASGS operator initials",
+    "Machine": "HPC resource name/abbreviation",
+    "Other": "Other descriptives",
+    "res": "Resolution in meters",
+    "ullo": "Upper Left Longtude in degrees",
+    "ulla": "Upper Left Latitude in degrees",
+    "nx": "Number of cells in longitude",
+    "ny": "Number of cells in latitude"
+}

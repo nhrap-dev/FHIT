@@ -1,0 +1,70 @@
+{
+	"hazus_settings_path":"C:/Program Files (x86)/Hazus/Settings.xml",
+	"hazus_settings_element":"./HazusSettings/General/HazardFolderPath",
+	"hazard_types": ["Riverine", "Coastal", "Storm Surge"],
+	"file_types":["tif","tiff"],
+	"adcirc": {
+		"hazard_types": [ "Coastal", "Storm Surge" ],
+		"description": "A (PARALLEL) ADVANCED CIRCULATION MODEL FOR OCEANIC,COASTAL AND ESTUARINE WATERS",
+		"home_url": "https://adcirc.org/",
+		"source_url": "https://hazus.s3.amazonaws.com/",
+		"aws_s3_bucket_name": "hazus",
+		"project": false,
+		"depth_unit": "meter"
+	},
+	"data_sources": [
+		{
+			"name": "ADCIRC",
+			"enabled": true,
+			"hazard_types": [ "Coastal", "Storm Surge" ],
+			"description": "A (PARALLEL) ADVANCED CIRCULATION MODEL FOR OCEANIC,COASTAL AND ESTUARINE WATERS",
+			"home_url": "https://adcirc.org/",
+			"source_url": "https://hazus.s3.amazonaws.com/",
+			"aws_s3_bucket_name": "hazus",
+			"project": false,
+			"depth_unit": "meter"
+		},
+		{
+			"name": "SLOSH",
+			"enabled": true,
+			"hazard_types": [ "Coastal", "Storm Surge" ],
+			"description": "SLOSH"
+		},
+		{
+			"name": "NOAA SLR",
+			"enabled": true,
+			"hazard_types": [ "Coastal", "Storm Surge" ]
+		},
+		{
+			"name": "FEMA MSC",
+			"enabled": true,
+			"hazard_types": [ "Coastal", "Storm Surge" ]
+		},
+		{
+			"name": "Stream Stats",
+			"enabled": true,
+			"hazard_types": [ "Coastal", "Storm Surge" ]
+		},
+		{
+			"name": "NHD+",
+			"enabled": true,
+			"hazard_types": [ "Riverine" ],
+			"description": "SLOSH"
+		},
+		{
+			"name": "USGS",
+			"enabled": true,
+			"hazard_types": [ "Riverine" ]
+		},
+		{
+			"name": "NOAA",
+			"enabled": true,
+			"hazard_types": [ "Riverine" ]
+		},
+		{
+			"name": "FEMA MSC",
+			"enabled": true,
+			"hazard_types": [ "Riverine" ]
+		}
+	]
+}

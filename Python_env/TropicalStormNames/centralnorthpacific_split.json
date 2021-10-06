@@ -1,0 +1,58 @@
+{
+	"list1": {
+		"01": "Akoni",
+		"02": "Ema",
+		"03": "Hone",
+		"04": "Iona",
+		"05": "Keli",
+		"06": "Lala",
+		"07": "Moke",
+		"08": "Nolo",
+		"09": "Olana",
+		"10": "Pena",
+		"11": "Ulana",
+		"12": "Wale"
+	},
+	"list2": {
+		"01": "Aka",
+		"02": "Ekeka",
+		"03": "Hene",
+		"04": "Iolana",
+		"05": "Keoni",
+		"06": "Lino",
+		"07": "Mele",
+		"08": "Nona",
+		"09": "Oliwa",
+		"10": "Pama",
+		"11": "Upana",
+		"12": "Wene"
+	},
+	"list3":{
+		"01": "Alika",
+		"02": "Ele",
+		"03": "Huko",
+		"04": "Iopa",
+		"05": "Kika",
+		"06": "Lana",
+		"07": "Maka",
+		"08": "Neki",
+		"09": "Omeka",
+		"10": "Pewa",
+		"11": "Unala",
+		"12": "Wali"
+	},
+	"list4":{
+		"01": "Ana",
+		"02": "Ela",
+		"03": "Halola",
+		"04": "Iune",
+		"05": "Kilo",
+		"06": "Loke",
+		"07": "Malia",
+		"08": "Niala",
+		"09": "Oho",
+		"10": "Pali",
+		"11": "Ulika",
+		"12": "Walaka"
+	}
+}

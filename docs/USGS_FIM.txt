@@ -1,0 +1,25 @@
+https://fim.wim.usgs.gov/fim/
+no naming consistency and see state plane coord systems being used. 
+
+For FIM I found this Amazons S3 bucket, 
+however it does not appear to have the index.html available for easy browsing: 
+https://wimcloud.usgs.gov.s3.amazonaws.com/
+Although its a bit hard to see any organization in that bucket as there are tiff and supprting files at the root level
+
+####################################################################
+
+It looks like one might be able to navigate programmatically around that site by looking at the id's, JSON links and JSON content. It would be good to confirm that the schema of these JSON are consistent and persistent.
+ 
+starting url
+https://www.sciencebase.gov/catalog/item/5d64186fe4b01d82ce986fe6
+starting url JSON
+https://www.sciencebase.gov/catalog/items?parentId=5d64186fe4b01d82ce986fe6&format=json
+Notice the id '5d64186fe4b01d82ce986fe6' is used in both
+
+The title and id are useful
+ 
+One of the children from the starting url (it has a unique id)
+https://www.sciencebase.gov/catalog/item/5d7138c7e4b0c4f70cfd6fea
+and its JSON
+https://www.sciencebase.gov/catalog/item/5d7138c7e4b0c4f70cfd6fea?format=json
+and the json has some links to files it appears 
