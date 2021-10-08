@@ -222,7 +222,7 @@ class SearchParametersADCIRC(ttk.Frame):
         self.advisoryList = ['Choose an Advisory...']
 
         #TODO handle if website down or data format changed significantly
-        self.adcircData = adcirc.ADCIRC()
+        self.set_adcirc_data_wpopup() #set self.adcircData attribute with please wait popup
         self.setYearList()
 
         self.columnconfigure(0)
@@ -230,6 +230,20 @@ class SearchParametersADCIRC(ttk.Frame):
 
         container.file_selection.trace_variable("w", self.file_selection_updated)
         
+    def popup(self):
+        '''Create a popup window'''
+        popup_window = tk.Toplevel(self)
+        popup_window.transient()
+        tk.Label(popup_window, text="Please Wait...", font=(None, 36)).pack()
+        self.update()
+        popup_window.grab_set()
+        return popup_window
+    def set_adcirc_data_wpopup(self):
+        '''Create popup window while downloading the file'''
+        wait_popup = self.popup()
+        self.adcircData = adcirc.ADCIRC() 
+        wait_popup.destroy()
+
     def __create_widgets(self):
         self.LabelframeSearchParameters = tk.LabelFrame(self, font=("Tahoma", "12"), labelanchor='n', borderwidth=2)
         self.LabelframeSearchParameters.configure(text='''SELECT FLOOD HAZARD SEARCH PARAMETERS''')
@@ -366,8 +380,8 @@ class SearchParametersADCIRC(ttk.Frame):
         self.controller.file_list_update.set(True)
 
     def clearFileSelection(self, *args):
-        container.file_selection.set('')
-        container.file_selection_key.set('')
+        self.controller.file_selection.set('')
+        self.controller.file_selection_key.set('')
 
     ## FILE PROPERTIES ##
     def file_selection_updated(self, *args):
