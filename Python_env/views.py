@@ -2,16 +2,9 @@
 python 3
 Widget Classes
 """
-#TODO pep8 standards
-#TODO clean up inheritances
-#TODO break out frames? widgets?
-
-#TODO remove container and use controller instead; if container is the same as controller here
-#TODO handle no internet
-#TODO display storm name, basin and number; JIRA
-#TODO display human readable file properties; JIRA
-
-
+#TODO pep8 standards CWL
+#TODO break out frames? widgets? CWL
+#TODO handle no internet CWL
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -47,45 +40,45 @@ class GUI(tk.Frame):
 
         self.file_selection_propeties = {}
 
-        #TODO Options settings
+        #TODO Options settings CWL
         #unit of measurement
 
         self.create_widgets()
 
     def create_widgets(self):
-        self.SelectHazardTypeSourceFrame = SelectHazardTypeSource(self, self)#TODO is this best practice with self, self?
+        self.SelectHazardTypeSourceFrame = SelectHazardTypeSource(self)
         self.SelectHazardTypeSourceFrame.grid(column=0, row=0, sticky='new', padx=10, pady=10)
 
         self.show_search_parameters_default_frame()
 
-        #Commented out for IV&V #self.OptionsFrame = Options(self, self)
+        #Commented out for IV&V #self.OptionsFrame = Options(self)
         #Commented out for IV&V #self.OptionsFrame.grid(column=0, row=2, sticky='sw', padx=20, pady=20)
 
-        self.SelectFileListFrame = SelectFileList(self, self)
+        self.SelectFileListFrame = SelectFileList(self)
         self.SelectFileListFrame.grid(column=1, row=0, sticky='new', padx=10, pady=10)
 
-        self.SelectFilePropertiesFrame = SelectFileProperties(self, self)
+        self.SelectFilePropertiesFrame = SelectFileProperties(self)
         self.SelectFilePropertiesFrame.grid(column=1, row=1, sticky='new', padx=10, pady=10)
 
-        self.ButtonsFrame = Buttons(self, self)
+        self.ButtonsFrame = Buttons(self)
         self.ButtonsFrame.grid(column=1, row=2, sticky='sw', padx=10, pady=10)
 
     def show_search_parameters_default_frame(self):
-        self.SearchParametersDefaultFrame = SearchParametersDefault(self, self)
+        self.SearchParametersDefaultFrame = SearchParametersDefault(self)
         self.SearchParametersDefaultFrame.grid(column=0, row=1, sticky='new', padx=10, pady=10)
 
     def destroy_search_parameters_default_frame(self):
         self.SearchParametersDefaultFrame.destroy()
 
     def show_search_parameters_adcirc_frame(self):
-        self.SearchParametersADCIRCFrame = SearchParametersADCIRC(self, self)
+        self.SearchParametersADCIRCFrame = SearchParametersADCIRC(self)
         self.SearchParametersADCIRCFrame.grid(column=0, row=1, sticky='new', padx=10, pady=10)
 
     def destroy_search_parameters_adcirc_frame(self):
         self.SearchParametersADCIRCFrame.destroy()
 
     def trace_when_source_is_updated(self, *args):
-        #TODO need to make this cleaner to support many different search parameters
+        #TODO need to make this cleaner to support many different search parameters CWL
         if self.hazard_data_source_selection.get() == "ADCIRC":
             try:
                 self.destroy_search_parameters_default_frame()
@@ -101,8 +94,8 @@ class GUI(tk.Frame):
 
 class SelectHazardTypeSource(ttk.Frame):
     """Frame for selecting hazard type and hazard source"""
-    def __init__(self, container, controller):
-        super().__init__(container)
+    def __init__(self, controller):
+        super().__init__()
         self.controller=controller
         self.columnconfigure(0, weight=1)
 
@@ -159,7 +152,6 @@ class SelectHazardTypeSource(ttk.Frame):
 
     def __clear_hazard_sources(self, *args):
         self.comboboxHazardSource.set('')
-        #TODO clear file list and file properties
         self.controller.SelectFilePropertiesFrame.clear_file_properties()
         self.controller.SelectFileListFrame.clearFileList()
 
@@ -172,7 +164,7 @@ class SelectHazardTypeSource(ttk.Frame):
         self.controller.hazard_data_source_selection.set(self.comboboxHazardSource.get())
         print(self.controller.hazard_data_source_selection.get())
 
-    ##HANDLERS## TODO Clean this up
+    ##HANDLERS## TODO Clean this up CWL
     def __handler_comboboxHazardType(self, *args):
         self.__clear_hazard_data_source_selection()
         self.__clear_hazard_sources()
@@ -189,8 +181,8 @@ class SelectHazardTypeSource(ttk.Frame):
 
 class SearchParametersDefault(ttk.Frame):
     """Default frame for search parameters; search parameters frame for no data source selected"""
-    def __init__(self, container, controller):
-        super().__init__(container)
+    def __init__(self, controller):
+        super().__init__()
         self.controller=controller
         self.columnconfigure(0, weight=1)
         self.create_widgets()
@@ -204,8 +196,8 @@ class SearchParametersDefault(ttk.Frame):
 
 class SearchParametersADCIRC(ttk.Frame):
     """ """
-    def __init__(self, container, controller):
-        super().__init__(container)
+    def __init__(self, controller):
+        super().__init__()
         self.controller=controller
         self.columnconfigure(0, weight=1)
 
@@ -214,21 +206,21 @@ class SearchParametersADCIRC(ttk.Frame):
         self.stormSelection = tk.StringVar()
         self.advisorySelection = tk.StringVar()
         self.floodDepthGridSelection = tk.StringVar()
-        #self.fileKey = tk.StringVar() #TODO for download
+        #self.fileKey = tk.StringVar() #TODO for download CWL
 
         self.yearList = ['Choose a Year...']
         self.weathertypeList = ["Synoptic", "Tropical"]
         self.stormList = ['Choose a Storm...'] 
         self.advisoryList = ['Choose an Advisory...']
 
-        #TODO handle if website down or data format changed significantly
+        #TODO handle if website down or data format changed significantly CWL
         self.set_adcirc_data_wpopup() #set self.adcircData attribute with please wait popup
         self.setYearList()
 
         self.columnconfigure(0)
         self.__create_widgets()
 
-        container.file_selection.trace_variable("w", self.file_selection_updated)
+        controller.file_selection.trace_variable("w", self.file_selection_updated)
         
     def popup(self):
         '''Create a popup window'''
@@ -397,13 +389,13 @@ class SearchParametersADCIRC(ttk.Frame):
 
 class SelectFileList(ttk.Frame):
     """Frame for listing files from search parameters"""
-    def __init__(self, container, controller):
-        super().__init__(container)
+    def __init__(self, controller):
+        super().__init__()
         self.controller=controller
         self.columnconfigure(0, weight=1)
         self.__create_widgets()
 
-        container.file_list_update.trace_variable("w", self._trace_when_file_list_is_updated)
+        controller.file_list_update.trace_variable("w", self._trace_when_file_list_is_updated)
 
     def __create_widgets(self):
         ttk.Label(self, text='SELECT FROM AVAILABLE FILES').grid(column=0, row=0, sticky='w')
@@ -431,7 +423,6 @@ class SelectFileList(ttk.Frame):
     def clearFileList(self, *args):
         self.treeviewFiles.delete(*self.treeviewFiles.get_children())
         self.controller.ButtonsFrame.ButtonDownloadImport.config(state='disabled')
-        #pass #TODO 
 
     def load_data(self, list):
         counter = 0
@@ -449,18 +440,18 @@ class SelectFileList(ttk.Frame):
 
 class SelectFileProperties(ttk.Frame):
     """Frame to show property/value of selected file"""
-    def __init__(self, container, controller):
-        super().__init__(container)
+    def __init__(self, controller):
+        super().__init__()
         self.columnconfigure(0, weight=1)
         self.controller=controller
         self.create_widgets()
 
-        container.file_selection.trace_variable("w", self.trace_when_file_is_selected)
+        controller.file_selection.trace_variable("w", self.trace_when_file_is_selected)
 
     def create_widgets(self):
         ttk.Label(self, text='SELECTED FILE PROPERTIES').grid(column=0, row=0, sticky='w')
         self.treeviewFileProperties = ttk.Treeview(self, columns=(1,2), show='headings')
-        self.treeviewFileProperties.column(2, minwidth=200)#TODO appears to not do anything
+        self.treeviewFileProperties.column(2, minwidth=200) #TODO appears to not do anything CWL
         self.treeviewFileProperties.grid(column=0, row=1, sticky='ew')
         self.treeviewFileProperties.heading(1, text='PROPERTY', anchor='w')
         self.treeviewFileProperties.heading(2, text='VALUE', anchor='w')
@@ -491,8 +482,8 @@ class SelectFileProperties(ttk.Frame):
 
 class Buttons(ttk.Frame):
     """Frame for buttons"""
-    def __init__(self, container, controller):
-        super().__init__(container)
+    def __init__(self, controller):
+        super().__init__()
         self.controller=controller
         self.create_widgets()
 
@@ -550,8 +541,8 @@ class Buttons(ttk.Frame):
 
 class Options(ttk.Frame):
     """Frame for setting options"""
-    def __init__(self, container, controller):
-        super().__init__(container)
+    def __init__(self, controller):
+        super().__init__()
         self.controller=controller
         self.columnconfigure(0, weight=1)
         self.create_widgets()
@@ -564,13 +555,13 @@ class Options(ttk.Frame):
         self.comboboxDepthUnit['values'] = ['TODO Depth Unit', 'Foot', 'Meter', 'Centimeter']
         self.comboboxDepthUnit.config(state='readonly')
         self.comboboxDepthUnit.current(0)
-        #TODO get default value from config based on data source
+        #TODO get default value from config based on data source CWL
         self.comboboxDepthUnit.grid(column=1, row=1)
 
-        #TODO clip to study region checkbox/button/wizard
+        #TODO clip to study region checkbox/button/wizard CWL
 
-        #TODO checkbox to project?
-        #TODO config setting to project to UTM, will require determining projection of file
-        # and best UTM zone to project to
+        #TODO checkbox to project? CWL
+        #TODO config setting to project to UTM, will require determining projection of file CWL
+        # and best UTM zone to project to CWL
 
-        #TODO if file already exists, prompt to overwrite or not; could be config setting for default
+        #TODO if file already exists, prompt to overwrite or not; could be config setting for default CWL
