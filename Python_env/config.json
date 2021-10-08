@@ -17,44 +17,44 @@
 		},
 		{
 			"name": "SLOSH",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Coastal", "Storm Surge" ],
 			"description": "SLOSH"
 		},
 		{
 			"name": "NOAA SLR",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Coastal", "Storm Surge" ]
 		},
 		{
 			"name": "FEMA MSC",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Coastal", "Storm Surge" ]
 		},
 		{
 			"name": "Stream Stats",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Coastal", "Storm Surge" ]
 		},
 		{
 			"name": "NHD+",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Riverine" ],
 			"description": "SLOSH"
 		},
 		{
 			"name": "USGS",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Riverine" ]
 		},
 		{
 			"name": "NOAA",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Riverine" ]
 		},
 		{
 			"name": "FEMA MSC",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Riverine" ]
 		}
 	]

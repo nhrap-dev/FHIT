@@ -58,8 +58,8 @@ class GUI(tk.Frame):
 
         self.show_search_parameters_default_frame()
 
-        self.OptionsFrame = Options(self, self)
-        self.OptionsFrame.grid(column=0, row=2, sticky='sw', padx=20, pady=20)
+        #Commented out for IV&V #self.OptionsFrame = Options(self, self)
+        #Commented out for IV&V #self.OptionsFrame.grid(column=0, row=2, sticky='sw', padx=20, pady=20)
 
         self.SelectFileListFrame = SelectFileList(self, self)
         self.SelectFileListFrame.grid(column=1, row=0, sticky='new', padx=10, pady=10)
@@ -411,10 +411,12 @@ class SelectFileList(ttk.Frame):
 
     def setFileSelection(self, *args):
         self.controller.file_selection.set(self.selectItem())
+        self.controller.ButtonsFrame.ButtonDownloadImport.config(state='enabled')
         print(f"You chose File: {self.controller.file_selection.get()}")
 
     def clearFileList(self, *args):
         self.treeviewFiles.delete(*self.treeviewFiles.get_children())
+        self.controller.ButtonsFrame.ButtonDownloadImport.config(state='disabled')
         #pass #TODO 
 
     def load_data(self, list):
@@ -481,8 +483,10 @@ class Buttons(ttk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.ButtonDownloadImport = ttk.Button(self, text="Download and Import Selected File", command=self.button_download_command).grid(column=0, row=1, padx=5)
-        self.ButtonBrowseImport = ttk.Button(self, text="Browse for Existing Hazard Data to Import").grid(column=1, row=1, padx=5)
+        self.ButtonDownloadImport = ttk.Button(self, text="Download and Import Selected File", command=self.button_download_command)
+        self.ButtonDownloadImport.grid(column=0, row=1, padx=5)
+        self.ButtonDownloadImport.config(state='disabled')
+        #Commented out for IV&V#self.ButtonBrowseImport = ttk.Button(self, text="Browse for Existing Hazard Data to Import").grid(column=1, row=1, padx=5)
         self.ButtonQuit = ttk.Button(self, text="Quit")
         self.ButtonQuit.configure(command=self.controller.quit) # will quit Tcl interpreter, i.e. IDLE
         self.ButtonQuit.grid(column=2, row=1, padx=5)
