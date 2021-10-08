@@ -13,7 +13,13 @@
 			"source_url": "https://hazus.s3.amazonaws.com/",
 			"aws_s3_bucket_name": "hazus",
 			"project": false,
-			"depth_unit": "meter"
+			"depth_unit": "feet"
+		},
+		{
+			"name": "No Sources Available",
+			"enabled": true,
+			"hazard_types": [ "Riverine" ],
+			"description": "No Sources Available"
 		},
 		{
 			"name": "SLOSH",
