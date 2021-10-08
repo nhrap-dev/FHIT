@@ -513,7 +513,7 @@ class Buttons(ttk.Frame):
             key = self.controller.SearchParametersADCIRCFrame.adcircData.aws_functions.get_awskey_from_filename(year, weathertype, storm_number, advisory, file_name)
             self.controller.SearchParametersADCIRCFrame.adcircData.aws_functions.download_awss3_file(key, download_path)
             popup_download_complete = ctypes.windll.user32.MessageBoxW
-            Thread(target = lambda :popup_download_complete(None, f'Downloaded: {key}', 'Download Complete', 0)).start()
+            Thread(target=lambda :popup_download_complete(None, f'Downloaded: {key}', 'Download Complete', 0)).start()
         else:
             print('did nothing on download button press')
 
