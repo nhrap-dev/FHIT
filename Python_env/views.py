@@ -230,11 +230,21 @@ class SearchParametersADCIRC(ttk.Frame):
         self.update()
         popup_window.grab_set()
         return popup_window
+
     def set_adcirc_data_wpopup(self):
-        '''Create popup window while downloading the file'''
+        '''Create popup window while downloading the adcirc data and set Raster Unit'''
         wait_popup = self.popup()
         self.adcircData = adcirc.ADCIRC() 
+        self.adcircData.data['Raster Unit'] = self.get_adcric_depth_unit()
         wait_popup.destroy()
+
+    def get_adcric_depth_unit(self):
+        with open(os.path.join(Path(__file__).parent, "config.json")) as f:
+            config_json = json.load(f)
+        temp_dict_a = config_json['data_sources']
+        temp_dict_b = list(filter(lambda data_source: data_source['name'] == 'ADCIRC', temp_dict_a))
+        depth_unit = temp_dict_b[0]['depth_unit']
+        return depth_unit
 
     def __create_widgets(self):
         self.LabelframeSearchParameters = tk.LabelFrame(self, font=("Tahoma", "12"), labelanchor='n', borderwidth=2)
