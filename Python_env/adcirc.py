@@ -267,6 +267,8 @@ class parse_adcirc_key:
                 if len(raster_info) == 5: #TODO Validation should be moved
                     file_dict['StormNumber'] = file_stem_split[0]
                     file_dict['Advisory'] = file_stem_split[1]
+                    if file_dict['Advisory'] == '00':
+                        file_dict['Advisory'] = 'Hindcast'
                     file_dict['VarName'] = file_stem_split[2]
                     file_dict['GridNameAbbrev'] = file_stem_split[3]
                     file_dict['WindModel'] = file_stem_split[4]

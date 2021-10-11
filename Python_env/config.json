@@ -13,48 +13,54 @@
 			"source_url": "https://hazus.s3.amazonaws.com/",
 			"aws_s3_bucket_name": "hazus",
 			"project": false,
-			"depth_unit": "meter"
+			"depth_unit": "feet"
+		},
+		{
+			"name": "No Sources Available",
+			"enabled": true,
+			"hazard_types": [ "Riverine" ],
+			"description": "No Sources Available"
 		},
 		{
 			"name": "SLOSH",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Coastal", "Storm Surge" ],
 			"description": "SLOSH"
 		},
 		{
 			"name": "NOAA SLR",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Coastal", "Storm Surge" ]
 		},
 		{
 			"name": "FEMA MSC",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Coastal", "Storm Surge" ]
 		},
 		{
 			"name": "Stream Stats",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Coastal", "Storm Surge" ]
 		},
 		{
 			"name": "NHD+",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Riverine" ],
 			"description": "SLOSH"
 		},
 		{
 			"name": "USGS",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Riverine" ]
 		},
 		{
 			"name": "NOAA",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Riverine" ]
 		},
 		{
 			"name": "FEMA MSC",
-			"enabled": true,
+			"enabled": false,
 			"hazard_types": [ "Riverine" ]
 		}
 	]
