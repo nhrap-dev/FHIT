@@ -4,7 +4,7 @@ The Flood Hazard Import Tool FHIT is used to download depth grids for use in Haz
 
 ## Requirements
 
-The Flood Hazard Import Tool requires Python >3.6, Hazpy, Hazus, and an internet connection. See the To Use section on how to install.
+The Flood Hazard Import Tool requires Python, Hazpy, Miniforge, and an internet connection. See https://github.com/nhrap-dev/Environment-Setup on how to setup your environment before running FHIT. See the To Use section on how to install FHIT.
 
 ## To Use
 
