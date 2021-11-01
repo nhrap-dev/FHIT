@@ -411,7 +411,7 @@ class AWSFunctions:
             aws_key = file.key.unique()
             return aws_key[0]
 
-    def download_awss3_file(self, key, download_path):
+    def download_awss3_file(self, key, download_path, prefix=''):
         """ Downloads specified file from AWS S3 buckets
 
             Keyword Arguments:
@@ -423,11 +423,12 @@ class AWSFunctions:
         bucket_name = get_awss3bucket_name().aws_s3_bucket_name
         s3 = boto3.resource('s3', config=Config(signature_version=UNSIGNED))
         file_name = key.split('/')[-1]
+        if prefix:
+            file_name = prefix + file_name
         download_path_file_name = os.path.join(download_path, file_name)
         try:
             s3.Bucket(bucket_name).download_file(key, download_path_file_name)
             print(f'downloaded: {key} To: {download_path_file_name}')
-            ##FHITSupport.popupmsgNextSteps(f'''File "{key}" is now available in Hazus''') #TODO this should go in gui; replace with text here CL
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "404":
                 print("The object does not exist.")
