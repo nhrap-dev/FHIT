@@ -8,7 +8,7 @@ The Flood Hazard Import Tool requires Hazus, Conda, and an internet connection. 
 
 ## To Use
 
-1. Download zip folder of tool from GitHub, unzip
+1. Download zip folder of tool from GitHub, unzip.
 
   ![Download Release FHIT](images/DownloadReleaseFHIT.jpg "Download Release FHIT")
 
@@ -20,7 +20,7 @@ The Flood Hazard Import Tool requires Hazus, Conda, and an internet connection. 
 
   ![Select Hazard Type](images/SelectHazardType.jpg "Select Hazard Type")
 
-4. Select your data source. The subsequent search parameters will differ depending on the data source
+4. Select your data source. The subsequent search parameters will differ depending on the data source.
 
   ![Select Hazard Source](images/SelectHazardSource.jpg "Select Hazard Source")
 
