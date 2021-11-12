@@ -4,7 +4,7 @@ The Flood Hazard Import Tool FHIT is used to download depth grids for use in Haz
 
 ## Requirements
 
-The Flood Hazard Import Tool requires Python, Hazpy, Miniforge, and an internet connection. See https://github.com/nhrap-dev/Environment-Setup on how to setup your environment before running FHIT. See the To Use section on how to install FHIT.
+The Flood Hazard Import Tool requires Hazus, Conda, and an internet connection. If you haven't already, follow this [README](https://github.com/nhrap-dev/Environment-Setup/tree/update-README) to setup your machine with miniforge and conda before trying to run FHIT.
 
 ## To Use
 
@@ -51,7 +51,7 @@ You will see the selected files properties once you've selected a file
 
   ![File Properties](images/FileProperties.jpg "File Properties")
 
-6. Import you selected depth grid. This will create a 'Coastal', 'Riverine' or 'Surge' folder in your HazardInput folder if they do not already exist and download the selected depth grid to it
+6. Download and import your selected depth grid file. This will create a 'Coastal', 'Riverine' or 'Surge' folder in your HazardInput folder and download the selected depth grid into it.
 
   ![Download Button](images/DownloadButton.jpg "Download Button")
 
