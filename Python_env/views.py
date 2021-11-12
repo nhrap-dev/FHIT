@@ -507,9 +507,8 @@ class Buttons(ttk.Frame):
         self.ButtonQuit.grid(column=2, row=1, padx=5)
 
     def download_file(self):
-        """ 1. Need to know which data source is active
-            2. Need to know the file to download
-            3. Need to know the options settings for any post processing
+        """ 
+            Notes: Need to know the options settings for any post processing
                 cm or m to ft
                 project to appropriate utm"""
         HazusHazardInputPath = FHITSupport.GetHazusHazardInputPath()
@@ -526,9 +525,13 @@ class Buttons(ttk.Frame):
             storm_number = self.controller.SearchParametersADCIRCFrame.stormSelection.get()
             advisory = self.controller.SearchParametersADCIRCFrame.advisorySelection.get()
             key = self.controller.SearchParametersADCIRCFrame.adcircData.aws_functions.get_awskey_from_filename(year, weathertype, storm_number, advisory, file_name)
-            self.controller.SearchParametersADCIRCFrame.adcircData.aws_functions.download_awss3_file(key, download_path)
+            prefix = ''
+            if weathertype == 'Tropical':
+                prefix = f"{str(year)}_"
+            file_name = key.split('/')[-1]
+            self.controller.SearchParametersADCIRCFrame.adcircData.aws_functions.download_awss3_file(key, download_path, prefix)
             popup_download_complete = ctypes.windll.user32.MessageBoxW
-            Thread(target=lambda :popup_download_complete(None, f'Downloaded: {key}', 'Download Complete', 0)).start()
+            Thread(target=lambda :popup_download_complete(None, f'Downloaded File To: {str(download_path)}\{prefix}{str(file_name)}', 'Download Complete', 0)).start()
         else:
             print('did nothing on download button press')
 
