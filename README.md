@@ -69,7 +69,7 @@ This tool currently only supports ADCIRC depth grids.
 
 **2021-Tropical-al19-30** = 19th storm in the Atlantic in 2021, advisory 30
 
-Avisory **00** is the hindcast data
+Advisory **00** is the hindcast data
 
 ## Contact
 
