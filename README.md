@@ -4,11 +4,11 @@ The Flood Hazard Import Tool FHIT is used to download depth grids for use in Haz
 
 ## Requirements
 
-The Flood Hazard Import Tool requires Python, Hazpy, Miniforge, and an internet connection. See https://github.com/nhrap-dev/Environment-Setup on how to setup your environment before running FHIT. See the To Use section on how to install FHIT.
+The Flood Hazard Import Tool requires Hazus, Conda, and an internet connection. Follow the [README](https://github.com/nhrap-dev/Environment-Setup/tree/update-README) to setup your machine with miniforge and conda before running FHIT.
 
 ## To Use
 
-1. Download zip folder of tool from GitHub, unzip
+1. Download zip folder of tool from GitHub, then unzip.
 
   ![Download Release FHIT](images/DownloadReleaseFHIT.jpg "Download Release FHIT")
 
@@ -20,7 +20,7 @@ The Flood Hazard Import Tool requires Python, Hazpy, Miniforge, and an internet 
 
   ![Select Hazard Type](images/SelectHazardType.jpg "Select Hazard Type")
 
-4. Select your data source. The subsequent search parameters will differ depending on the data source
+4. Select your data source. The subsequent search parameters will differ depending on the data source.
 
   ![Select Hazard Source](images/SelectHazardSource.jpg "Select Hazard Source")
 
@@ -51,7 +51,7 @@ You will see the selected files properties once you've selected a file
 
   ![File Properties](images/FileProperties.jpg "File Properties")
 
-6. Import you selected depth grid. This will create a 'Coastal', 'Riverine' or 'Surge' folder in your HazardInput folder if they do not already exist and download the selected depth grid to it
+6. Download and import your selected depth grid file. This will create a 'Coastal', 'Riverine' or 'Surge' folder in your HazardInput folder and download the selected depth grid into it.
 
   ![Download Button](images/DownloadButton.jpg "Download Button")
 
@@ -69,7 +69,7 @@ This tool currently only supports ADCIRC depth grids.
 
 **2021-Tropical-al19-30** = 19th storm in the Atlantic in 2021, advisory 30
 
-Avisory **00** is the hindcast data
+Advisory **00** is the hindcast data
 
 ## Contact
 
