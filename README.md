@@ -1,3 +1,5 @@
+# ATTENTION: The latest version of this tool is available at https://msc.fema.gov/portal/resources/hazus This github repository is no longer receiving updates.
+
 # Flood Hazard Import Tool (FHIT)
 
 The Flood Hazard Import Tool FHIT is used to download depth grids for use in Hazus modelling of Coastal, Riverine and Storm Surge flooding.
